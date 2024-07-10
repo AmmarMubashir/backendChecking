@@ -7,7 +7,7 @@ app.use(express.json());
 const user = require("./routes/userRoutes");
 
 app.get("/", () => {
-  res.send("welcome");
+  res.status(200).json("Welcome");
 });
 app.get("/health", (req, res) => {
   res.status(200).json("Health checking");
