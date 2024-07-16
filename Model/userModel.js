@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const bcrypt = require("bcryptjs");
+const JWT = require("jsonwebtoken");
 
 const userSchema = mongoose.Schema({
   name: {
@@ -14,6 +16,10 @@ const userSchema = mongoose.Schema({
   password: {
     type: String,
     required: [true, "Please enter your password"],
+  },
+  role: {
+    type: String,
+    default: "user",
   },
 });
 
