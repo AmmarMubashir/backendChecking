@@ -20,9 +20,9 @@ const quarter = require("./routes/quarterRoutes");
 const income = require("./routes/IncomeRoutes");
 const admin = require("./routes/adminRoute");
 
-app.get("/", () => {
-  res.status(200).json("Welcome");
-});
+// app.get("/", (req, res) => {
+//   res.send("Welcome");
+// });
 app.get("/health", (req, res) => {
   res.status(200).json("Health checking");
 });
