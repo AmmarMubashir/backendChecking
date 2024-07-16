@@ -2,7 +2,7 @@ const express = require("express");
 const {
   createIncomeStatement,
   getIncomeStatement,
-} = require("../controller/incomeCOntroller");
+} = require("../controller/incomeController");
 
 const router = express.Router();
 
