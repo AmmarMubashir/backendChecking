@@ -1,11 +1,11 @@
 const express = require("express");
-const { editSetting } = require("../controller/adminController");
+const { editIncomeStatement } = require("../controller/adminController");
 const { isAuthenticatedUser, authorizedRole } = require("../middleware/auth");
 
 const router = express.Router();
 
-router
-  .route("/edit")
-  .get(isAuthenticatedUser, authorizedRole("admin"), editSetting);
+router.route("/editIncomeStatement").put(editIncomeStatement);
 
 module.exports = router;
+
+// authorizedRole("admin"),
