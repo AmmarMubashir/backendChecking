@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
 const Quarter1Schema = mongoose.Schema({
+  id: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+    required: true,
+  },
   name: {
     type: String,
     required: [true, "Please Enter your team name"],

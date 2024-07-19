@@ -19,6 +19,7 @@ const user = require("./routes/userRoutes");
 const quarter = require("./routes/quarterRoutes");
 const income = require("./routes/IncomeRoutes");
 const admin = require("./routes/adminRoute");
+const quarter2 = require("./routes/quarter2Route");
 
 // app.get("/", (req, res) => {
 //   res.send("Welcome");
@@ -29,6 +30,7 @@ app.get("/health", (req, res) => {
 
 app.use("/api/v1", user);
 app.use("/api/v1", quarter);
+app.use("/api/v1/quarter2", quarter2);
 app.use("/api/v1", income);
 app.use("/api/v1", admin);
 

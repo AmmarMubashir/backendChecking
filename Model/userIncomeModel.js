@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
-const IncomeStatementModel = mongoose.Schema({
+const UserIncomeStatementModel = mongoose.Schema({
+  id: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+    required: true,
+  },
   income: [
     {
       Revenues: {
@@ -135,5 +140,7 @@ const IncomeStatementModel = mongoose.Schema({
   ],
 });
 
-
-module.exports = mongoose.model("IncomeStatement", IncomeStatementModel);
+module.exports = mongoose.model(
+  "UserIncomeStatement",
+  UserIncomeStatementModel
+);

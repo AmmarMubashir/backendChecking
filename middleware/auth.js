@@ -2,9 +2,11 @@ const User = require("../Model/userModel");
 const jwt = require("jsonwebtoken");
 
 exports.isAuthenticatedUser = async (req, res, next) => {
-  const { token } = req.cookies;
-  //   console.log("COOKIES", token);
-  // const token = req.headers.authorization.split(" ")[];
+  // const { token } = req.cookies;
+  // console.log("COOKIES", token);
+  const token = req.headers.authorization.split(" ")[1];
+
+  // console.log(token);
 
   if (!token)
     return res
@@ -16,6 +18,7 @@ exports.isAuthenticatedUser = async (req, res, next) => {
 
   console.log("decodedData", decodedData);
   req.user = await User.findById(decodedData.userId);
+  // console.log("FRONTEND", req.user);
 
   //   console.log("User", req.user);
 

@@ -20,9 +20,10 @@ exports.signupUser = async (req, res) => {
 
     const newUser = new User({ name, email, password: hashedPassword });
 
+    let token;
     if (newUser) {
       // generate JWT token
-      const token = generateTokenAndSetCookies(newUser._id, res);
+      token = generateTokenAndSetCookies(newUser._id, res);
       await newUser.save();
     } else {
       res.status(400).json({
@@ -30,6 +31,7 @@ exports.signupUser = async (req, res) => {
       });
     }
 
+    console.log("TOKENNN", token);
     return res.status(201).json({
       data: newUser,
       token,
