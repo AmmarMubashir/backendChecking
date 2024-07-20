@@ -43,14 +43,6 @@ exports.createIncomeStatementForUser = async (req, res) => {
     let quarter2 = await userQuarter2.findOne({ id: req.user._id });
     let incomeData = await IncomeStatement.find({});
     incomeData = incomeData[0].income;
-    // let quarter3 = false;
-    // let quarter4 = false;
-    // let quarters = {
-    //   incomeData,
-    //   quarter3: false,
-    //   quarter4: false,
-    //   quarter5: false,
-    // };
 
     let quarters = [];
 
@@ -58,58 +50,30 @@ exports.createIncomeStatementForUser = async (req, res) => {
       quarters.push(quarter2);
     }
 
-    // console.log(incomeData[0]["Expenses And Costs"]);
-
-    // let opportunities = 0;
-    // if (quarter2) {
-    //   if (quarter2.option1.selected) {
-    //     opportunities += quarter2.option1.income;
-    //   }
-    //   if (quarter2.option2.selected) {
-    //     opportunities += quarter2.option2.income;
-    //   }
-    //   if (quarter2.option3.selected) {
-    //     opportunities += quarter2.option3.income;
-    //   }
-    // }
-
-    // let arr1 = true;
-    // let arr2 = true;
-    // let arr3 = false;
-
-    // let arr = [];
-    // if (arr1) {
-    //   arr.push("arr1");
-    // }
-    // if (arr2) {
-    //   arr.push("arr2");
-    // }
-    // if (arr3) {
-    //   arr.push("arr3");
-    // }
-
-    // for (let i = 0; i < 2; i++) {
-    //   if (arr[i]) {
-    //     console.log(arr[i]);
-    //   }
-    // }
-
     let incomes = [];
     for (let index = 0; index < 3; index++) {
       if (quarters[index]) {
         let opportunities = 0;
+        let opportunityCost = 0;
+        let OtherCost = 0;
 
         if (quarters[index].option1.selected) {
           opportunities += quarters[index].option1.income;
+          opportunityCost += quarters[index].option1.cost;
+          OtherCost += quarters[index].option1.otherCost;
         }
         if (quarters[index].option2.selected) {
-          opportunities += quarters[index].option2.income;
+          opportunities += quarters[index].option2.cost;
+          opportunityCost += quarters[index].option2.cost;
+          OtherCost += quarters[index].option2.otherCost;
         }
         if (quarters[index].option3.selected) {
           opportunities += quarters[index].option3.income;
+          opportunityCost += quarters[index].option3.cost;
+          OtherCost += quarters[index].option3.otherCost;
         }
 
-        // console.log(opportunities);
+        console.log("OTHERCOST", OtherCost);
 
         // console.log(incomeData[index].Revenues["Sales From Home"]);
 
@@ -148,8 +112,7 @@ exports.createIncomeStatementForUser = async (req, res) => {
             incomeData[index]["Expenses And Costs"]["Delivery Van Expenses"],
           "Initial Expenditure":
             incomeData[index]["Expenses And Costs"]["Initial Expenditure"],
-          "Opportunity Costs":
-            incomeData[index]["Expenses And Costs"]["Opportunity Costs"],
+          "Opportunity Costs": opportunityCost,
           Travel: incomeData[index]["Expenses And Costs"]["Travel"],
           Training: incomeData[index]["Expenses And Costs"]["Training"],
           "Loan Repayment":
@@ -158,6 +121,7 @@ exports.createIncomeStatementForUser = async (req, res) => {
             incomeData[index]["Expenses And Costs"]["Professional Fees"],
           "Sundry Expenses":
             incomeData[index]["Expenses And Costs"]["Sundry Expenses"],
+          "Other Cost": OtherCost,
         };
 
         for (let key1 in CostAndExpenses) {

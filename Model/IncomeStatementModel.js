@@ -86,6 +86,10 @@ const IncomeStatementModel = mongoose.Schema({
           type: Number,
           required: [true, "Please provide sun dry expenses"],
         },
+        "Other Cost": {
+          type: Number,
+          required: [true, "Please provide other costs"],
+        },
         "Total Cost And Expenses": {
           type: Number,
           required: [true, "Please provide total cost and expenses"],
@@ -134,6 +138,5 @@ const IncomeStatementModel = mongoose.Schema({
     },
   ],
 });
-
 
 module.exports = mongoose.model("IncomeStatement", IncomeStatementModel);

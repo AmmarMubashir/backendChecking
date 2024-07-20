@@ -16,7 +16,7 @@ exports.isAuthenticatedUser = async (req, res, next) => {
   const decodedData = jwt.verify(token, process.env.JWT_SECRET);
   if (!decodedData) return res.status(401).json({ message: "Invalid Token" });
 
-  console.log("decodedData", decodedData);
+  // console.log("decodedData", decodedData);
   req.user = await User.findById(decodedData.userId);
   // console.log("FRONTEND", req.user);
 

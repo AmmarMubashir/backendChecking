@@ -91,6 +91,10 @@ const UserIncomeStatementModel = mongoose.Schema({
           type: Number,
           required: [true, "Please provide sun dry expenses"],
         },
+        "Other Cost": {
+          type: Number,
+          required: [true, "Please provide other cost"],
+        },
         "Total Cost And Expenses": {
           type: Number,
           required: [true, "Please provide total cost and expenses"],
