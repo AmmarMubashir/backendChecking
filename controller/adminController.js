@@ -265,13 +265,25 @@ exports.getAllIncomeStatements = async (req, res) => {
   try {
     const incomeStatements = await userIncome.find();
 
+    // console.log(incomeStatements);
+
     const promises = incomeStatements.map(async (item) => {
       const team = await User.findById(item.id);
       let name = team.name;
       let email = team.email;
-      let revenue = item.income[0].Revenues["Total Revenue"];
-      let cost =
-        item.income[0]["Expenses And Costs"]["Total Cost And Expenses"];
+      let revenue = item.income.reduce(
+        (acc, current) => acc + current["Revenues"]["Total Revenue"],
+        0
+      );
+      let cost = item.income.reduce(
+        (acc, current) =>
+          acc + current["Expenses And Costs"]["Total Cost And Expenses"],
+        0
+      );
+
+      // let revenue = item.income[0]["Revenues"]["Total Revenue"];
+      // let cost =
+      //   item.income[0]["Expenses And Costs"]["Total Cost And Expenses"];
 
       return { name, email, revenue, cost }; // Return an object with data
     });
