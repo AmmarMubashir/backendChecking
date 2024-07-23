@@ -4,6 +4,7 @@ const {
   getIncomeStatement,
   createIncomeStatementForUser,
   getUserIncomeStatement,
+  updateIncomeStatementForUser,
 } = require("../controller/incomeController");
 
 const { isAuthenticatedUser } = require("../middleware/auth");
@@ -15,6 +16,9 @@ router.route("/incomeStatement").get(getIncomeStatement);
 router
   .route("/user/incomeStatement")
   .post(isAuthenticatedUser, createIncomeStatementForUser);
+router
+  .route("/user/incomeStatement")
+  .put(isAuthenticatedUser, updateIncomeStatementForUser);
 router
   .route("/user/incomeStatement")
   .get(isAuthenticatedUser, getUserIncomeStatement);
