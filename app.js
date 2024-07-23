@@ -24,9 +24,9 @@ const income = require("./routes/IncomeRoutes");
 const admin = require("./routes/adminRoute");
 const quarter2 = require("./routes/quarter2Route");
 
-// app.get("/", (req, res) => {
-//   res.send("Welcome");
-// });
+app.get("/", (req, res) => {
+  res.send("Welcome");
+});
 app.get("/health", (req, res) => {
   res.status(200).json("Health checking");
 });

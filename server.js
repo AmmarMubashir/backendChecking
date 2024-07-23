@@ -15,7 +15,15 @@ const connectToMongodb = async () => {
   }
 };
 
-app.listen("7000", () => {
-  connectToMongodb();
-  console.log(`Server is running on http://localhost:${process.env.PORT}`);
-});
+// app.listen("7000", () => {
+//   connectToMongodb();
+//   console.log(`Server is running on http://localhost:${process.env.PORT}`);
+// });
+
+connectToMongodb()
+  .then(() => {
+    app.listen(process.env.PORT || 8000, () => {
+      console.log(`⚙️ Server is running at port : ${process.env.PORT}`);
+    });
+  })
+  .catch((e) => console.log("MONGO db connection failed !!! ", err));
