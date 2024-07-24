@@ -229,25 +229,25 @@ exports.getUserIncomeStatement = async (req, res) => {
 
 exports.updateIncomeStatementForUser = async (req, res) => {
   try {
+    console.log("HIII");
+    // res.send("HII");
     let quarter3 = await userQuarter3.findOne({ id: req.user._id });
     let userIncome = await UserIncomeStatement.findOne({ id: req.user._id });
 
     userIncome = userIncome.income;
-    console.log(userIncome);
-
-    console.log(quarter3);
 
     let incomeData = await IncomeStatement.find({});
     incomeData = incomeData[0].income;
 
-    let quarters = [];
+    // console.log(userIncome);
+
+    // let quarters = [];
 
     // if (quarter3) {
     //   quarters.push(quarter3);
     // }
 
-    let incomes = [];
-    // for (let index = 0; index < 3; index++) {
+    let incomes;
     if (quarter3) {
       let opportunities = 0;
       let opportunityCost = 0;
@@ -271,8 +271,6 @@ exports.updateIncomeStatementForUser = async (req, res) => {
 
       console.log("OTHERCOST", OtherCost);
 
-      // console.log(incomeData[index].Revenues["Sales From Home"]);
-
       let data;
       data = {
         Revenues: {
@@ -285,8 +283,6 @@ exports.updateIncomeStatementForUser = async (req, res) => {
           "Total Revenue": 0,
         },
       };
-
-      // console.log(data);
 
       let totalRevenue = 0,
         totalExpensesAndCosts = 0;
@@ -327,14 +323,12 @@ exports.updateIncomeStatementForUser = async (req, res) => {
         "Total Cost And Expenses": totalExpensesAndCosts,
       };
 
-      // // console.log(totalRevenue);
       data.Revenues = {
         ...data.Revenues,
         "Total Revenue": totalRevenue,
       };
 
       data["Expenses And Costs"] = CostAndExpenses;
-      // console.log(data);
 
       data = {
         ...data,
@@ -387,21 +381,23 @@ exports.updateIncomeStatementForUser = async (req, res) => {
         "NET INCOME": data["PRETAX INCOME"] - data["Income Tax Expense"],
       };
 
-      incomes.push(data);
+      incomes = data;
     }
     // }
 
-    if (incomes.length > 0) {
-      incomes = [...userIncome, ...incomes];
-      let incomeDetails = {
+    // console.log(incomes);
+    let incomeDetails;
+    if (incomes) {
+      // incomes = [...userIncome, { ...incomes }];
+      incomeDetails = {
         id: req.user._id,
-        income: incomes,
+        income: [...userIncome, incomes],
       };
 
-      // console.log(incomeDetails);
+      console.log(incomes);
 
-      const updatedIncomeStatement = await UserIncomeStatement.findOneAndUpdate(
-        {},
+      const updatedIncomeStatement = await UserIncomeStatement.updateOne(
+        { id: req.user._id },
         incomeDetails,
         { new: true }
       );
@@ -409,7 +405,7 @@ exports.updateIncomeStatementForUser = async (req, res) => {
       res.status(201).json({ updatedIncomeStatement });
     }
   } catch (error) {
-    console.log(error.message);
+    console.log("Error in update user income statement", error.message);
     res.status(400).json({ message: error.message });
   }
 };

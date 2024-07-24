@@ -17,7 +17,7 @@ router
   .route("/user/incomeStatement")
   .post(isAuthenticatedUser, createIncomeStatementForUser);
 router
-  .route("/user/incomeStatement")
+  .route("/user/updateincomeStatement")
   .put(isAuthenticatedUser, updateIncomeStatementForUser);
 router
   .route("/user/incomeStatement")
