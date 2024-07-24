@@ -242,156 +242,154 @@ exports.updateIncomeStatementForUser = async (req, res) => {
 
     let quarters = [];
 
-    if (quarter3) {
-      quarters.push(quarter3);
-    }
+    // if (quarter3) {
+    //   quarters.push(quarter3);
+    // }
 
     let incomes = [];
-    for (let index = 0; index < 3; index++) {
-      if (quarters[index]) {
-        let opportunities = 0;
-        let opportunityCost = 0;
-        let OtherCost = 0;
+    // for (let index = 0; index < 3; index++) {
+    if (quarter3) {
+      let opportunities = 0;
+      let opportunityCost = 0;
+      let OtherCost = 0;
 
-        if (quarters[index].option1.selected) {
-          opportunities += quarters[index].option1.income;
-          opportunityCost += quarters[index].option1.cost;
-          OtherCost += quarters[index].option1.otherCost;
-        }
-        if (quarters[index].option2.selected) {
-          opportunities += quarters[index].option2.cost;
-          opportunityCost += quarters[index].option2.cost;
-          OtherCost += quarters[index].option2.otherCost;
-        }
-        if (quarters[index].option3.selected) {
-          opportunities += quarters[index].option3.income;
-          opportunityCost += quarters[index].option3.cost;
-          OtherCost += quarters[index].option3.otherCost;
-        }
-
-        console.log("OTHERCOST", OtherCost);
-
-        // console.log(incomeData[index].Revenues["Sales From Home"]);
-
-        let data;
-        data = {
-          Revenues: {
-            "Sales From Home": incomeData[index]["Revenues"]["Sales From Home"],
-            "Additional Income":
-              incomeData[index]["Revenues"]["Additional Income"],
-            Opportunities: opportunities,
-            Grants: incomeData[index]["Revenues"]["Grants"],
-            Loans: incomeData[index]["Revenues"]["Loans"],
-            "Other Income": incomeData[index]["Revenues"]["Other Income"],
-            "Total Revenue": 0,
-          },
-        };
-
-        // console.log(data);
-
-        let totalRevenue = 0,
-          totalExpensesAndCosts = 0;
-        for (let key in data.Revenues) {
-          totalRevenue += data.Revenues[key];
-        }
-
-        let CostAndExpenses = {
-          "Cost Of Goods Sold":
-            incomeData[index]["Expenses And Costs"]["Cost Of Goods Sold"],
-          Lease: incomeData[index]["Expenses And Costs"].Lease,
-          Marketing: incomeData[index]["Expenses And Costs"].Marketing,
-          "Budjeted Salaries":
-            incomeData[index]["Expenses And Costs"]["Budjeted Salaries"],
-          "Extra Expenditure":
-            incomeData[index]["Expenses And Costs"]["Extra Expenditure"],
-          "Delivery Van Expenses":
-            incomeData[index]["Expenses And Costs"]["Delivery Van Expenses"],
-          "Initial Expenditure":
-            incomeData[index]["Expenses And Costs"]["Initial Expenditure"],
-          "Opportunity Costs": opportunityCost,
-          Travel: incomeData[index]["Expenses And Costs"]["Travel"],
-          Training: incomeData[index]["Expenses And Costs"]["Training"],
-          "Loan Repayment":
-            incomeData[index]["Expenses And Costs"]["Loan Repayment"],
-          "Professional Fees":
-            incomeData[index]["Expenses And Costs"]["Professional Fees"],
-          "Sundry Expenses":
-            incomeData[index]["Expenses And Costs"]["Sundry Expenses"],
-          "Other Cost": OtherCost,
-        };
-
-        for (let key1 in CostAndExpenses) {
-          totalExpensesAndCosts += CostAndExpenses[key1];
-        }
-
-        CostAndExpenses = {
-          ...CostAndExpenses,
-          "Total Cost And Expenses": totalExpensesAndCosts,
-        };
-
-        // // console.log(totalRevenue);
-        data.Revenues = {
-          ...data.Revenues,
-          "Total Revenue": totalRevenue,
-        };
-
-        data["Expenses And Costs"] = CostAndExpenses;
-        // console.log(data);
-
-        data = {
-          ...data,
-          EBITIDA:
-            data.Revenues["Total Revenue"] -
-            data["Expenses And Costs"]["Total Cost And Expenses"],
-          Depreciation: incomeData[index]["Depreciation"],
-          EBIT:
-            data.Revenues["Total Revenue"] -
-            data["Expenses And Costs"]["Total Cost And Expenses"] +
-            incomeData[index]["Depreciation"],
-          Interest: incomeData[index]["Interest"],
-          "PRETAX INCOME":
-            data.Revenues["Total Revenue"] -
-            data["Expenses And Costs"]["Total Cost And Expenses"] +
-            incomeData[index]["Depreciation"] -
-            incomeData[index]["Interest"],
-          "Net Operating Loss":
-            data.Revenues["Total Revenue"] -
-              data["Expenses And Costs"]["Total Cost And Expenses"] +
-              incomeData[index]["Depreciation"] -
-              incomeData[index]["Interest"] <
-            0
-              ? data.Revenues["Total Revenue"] -
-                data["Expenses And Costs"]["Total Cost And Expenses"] +
-                incomeData[index]["Depreciation"] -
-                incomeData[index]["Interest"] +
-                0
-              : 0,
-        };
-
-        data = {
-          ...data,
-          "Use Of Net Operating Loss":
-            data["Net Operating Loss"] < 0
-              ? 0
-              : Math.min(data["PRETAX INCOME"], data["Net Operating Loss"]),
-        };
-        data = {
-          ...data,
-          "Taxable Income":
-            data["PRETAX INCOME"] - data["Use Of Net Operating Loss"] < 0
-              ? 0
-              : data["PRETAX INCOME"] - data["Use Of Net Operating Loss"],
-          "Income Tax Expense": incomeData[index]["Income Tax Expense"],
-        };
-
-        data = {
-          ...data,
-          "NET INCOME": data["PRETAX INCOME"] - data["Income Tax Expense"],
-        };
-
-        incomes.push(data);
+      if (quarter3.option1.selected) {
+        opportunities += quarter3.option1.income;
+        opportunityCost += quarter3.option1.cost;
+        OtherCost += quarter3.option1.otherCost;
       }
+      if (quarter3.option2.selected) {
+        opportunities += quarter3.option2.cost;
+        opportunityCost += quarter3.option2.cost;
+        OtherCost += quarter3.option2.otherCost;
+      }
+      if (quarter3.option3.selected) {
+        opportunities += quarter3.option3.income;
+        opportunityCost += quarter3.option3.cost;
+        OtherCost += quarter3.option3.otherCost;
+      }
+
+      console.log("OTHERCOST", OtherCost);
+
+      // console.log(incomeData[index].Revenues["Sales From Home"]);
+
+      let data;
+      data = {
+        Revenues: {
+          "Sales From Home": incomeData[1]["Revenues"]["Sales From Home"],
+          "Additional Income": incomeData[1]["Revenues"]["Additional Income"],
+          Opportunities: opportunities,
+          Grants: incomeData[1]["Revenues"]["Grants"],
+          Loans: incomeData[1]["Revenues"]["Loans"],
+          "Other Income": incomeData[1]["Revenues"]["Other Income"],
+          "Total Revenue": 0,
+        },
+      };
+
+      // console.log(data);
+
+      let totalRevenue = 0,
+        totalExpensesAndCosts = 0;
+      for (let key in data.Revenues) {
+        totalRevenue += data.Revenues[key];
+      }
+
+      let CostAndExpenses = {
+        "Cost Of Goods Sold":
+          incomeData[1]["Expenses And Costs"]["Cost Of Goods Sold"],
+        Lease: incomeData[1]["Expenses And Costs"].Lease,
+        Marketing: incomeData[1]["Expenses And Costs"].Marketing,
+        "Budjeted Salaries":
+          incomeData[1]["Expenses And Costs"]["Budjeted Salaries"],
+        "Extra Expenditure":
+          incomeData[1]["Expenses And Costs"]["Extra Expenditure"],
+        "Delivery Van Expenses":
+          incomeData[1]["Expenses And Costs"]["Delivery Van Expenses"],
+        "Initial Expenditure":
+          incomeData[1]["Expenses And Costs"]["Initial Expenditure"],
+        "Opportunity Costs": opportunityCost,
+        Travel: incomeData[1]["Expenses And Costs"]["Travel"],
+        Training: incomeData[1]["Expenses And Costs"]["Training"],
+        "Loan Repayment": incomeData[1]["Expenses And Costs"]["Loan Repayment"],
+        "Professional Fees":
+          incomeData[1]["Expenses And Costs"]["Professional Fees"],
+        "Sundry Expenses":
+          incomeData[1]["Expenses And Costs"]["Sundry Expenses"],
+        "Other Cost": OtherCost,
+      };
+
+      for (let key1 in CostAndExpenses) {
+        totalExpensesAndCosts += CostAndExpenses[key1];
+      }
+
+      CostAndExpenses = {
+        ...CostAndExpenses,
+        "Total Cost And Expenses": totalExpensesAndCosts,
+      };
+
+      // // console.log(totalRevenue);
+      data.Revenues = {
+        ...data.Revenues,
+        "Total Revenue": totalRevenue,
+      };
+
+      data["Expenses And Costs"] = CostAndExpenses;
+      // console.log(data);
+
+      data = {
+        ...data,
+        EBITIDA:
+          data.Revenues["Total Revenue"] -
+          data["Expenses And Costs"]["Total Cost And Expenses"],
+        Depreciation: incomeData[1]["Depreciation"],
+        EBIT:
+          data.Revenues["Total Revenue"] -
+          data["Expenses And Costs"]["Total Cost And Expenses"] +
+          incomeData[1]["Depreciation"],
+        Interest: incomeData[1]["Interest"],
+        "PRETAX INCOME":
+          data.Revenues["Total Revenue"] -
+          data["Expenses And Costs"]["Total Cost And Expenses"] +
+          incomeData[1]["Depreciation"] -
+          incomeData[1]["Interest"],
+        "Net Operating Loss":
+          data.Revenues["Total Revenue"] -
+            data["Expenses And Costs"]["Total Cost And Expenses"] +
+            incomeData[1]["Depreciation"] -
+            incomeData[1]["Interest"] <
+          0
+            ? data.Revenues["Total Revenue"] -
+              data["Expenses And Costs"]["Total Cost And Expenses"] +
+              incomeData[1]["Depreciation"] -
+              incomeData[1]["Interest"] +
+              0
+            : 0,
+      };
+
+      data = {
+        ...data,
+        "Use Of Net Operating Loss":
+          data["Net Operating Loss"] < 0
+            ? 0
+            : Math.min(data["PRETAX INCOME"], data["Net Operating Loss"]),
+      };
+      data = {
+        ...data,
+        "Taxable Income":
+          data["PRETAX INCOME"] - data["Use Of Net Operating Loss"] < 0
+            ? 0
+            : data["PRETAX INCOME"] - data["Use Of Net Operating Loss"],
+        "Income Tax Expense": incomeData[1]["Income Tax Expense"],
+      };
+
+      data = {
+        ...data,
+        "NET INCOME": data["PRETAX INCOME"] - data["Income Tax Expense"],
+      };
+
+      incomes.push(data);
     }
+    // }
 
     if (incomes.length > 0) {
       incomes = [...userIncome, ...incomes];
