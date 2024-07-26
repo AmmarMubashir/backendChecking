@@ -67,7 +67,7 @@ exports.createIncomeStatementForUser = async (req, res) => {
           OtherCost += quarters[index].option1.otherCost;
         }
         if (quarters[index].option2.selected) {
-          opportunities += quarters[index].option2.cost;
+          opportunities += quarters[index].option2.income;
           opportunityCost += quarters[index].option2.cost;
           OtherCost += quarters[index].option2.otherCost;
         }
@@ -125,6 +125,8 @@ exports.createIncomeStatementForUser = async (req, res) => {
             incomeData[index]["Expenses And Costs"]["Professional Fees"],
           "Sundry Expenses":
             incomeData[index]["Expenses And Costs"]["Sundry Expenses"],
+          "Additional Cost":
+            incomeData[index]["Expenses And Costs"]["Additional Cost"],
           "Other Cost": OtherCost,
         };
 
@@ -311,6 +313,8 @@ exports.updateIncomeStatementForUser = async (req, res) => {
           incomeData[1]["Expenses And Costs"]["Professional Fees"],
         "Sundry Expenses":
           incomeData[1]["Expenses And Costs"]["Sundry Expenses"],
+        "Additional Cost":
+          incomeData[1]["Expenses And Costs"]["Additional Cost"],
         "Other Cost": OtherCost,
       };
 

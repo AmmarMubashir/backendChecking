@@ -301,3 +301,13 @@ exports.getAllIncomeStatements = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+exports.getUserIncomeStatementAdmin = async (req, res) => {
+  try {
+    const incomeStatement = await userIncome.findOne({ id: req.params.id });
+
+    res.status(201).json(incomeStatement);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};

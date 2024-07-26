@@ -10,6 +10,7 @@ const {
   updateQuarter2,
   createQuarter3,
   updateQuarter3,
+  getUserIncomeStatementAdmin,
 } = require("../controller/adminController");
 const { isAuthenticatedUser, authorizedRole } = require("../middleware/auth");
 
@@ -34,6 +35,10 @@ router.route("/admin/updateQuarter3").put(updateQuarter3);
 router
   .route("/admin/IncomeStatement")
   .get(isAuthenticatedUser, authorizedRole("admin"), getAllIncomeStatements);
+
+router
+  .route("/admin/user/incomeStatement/:id")
+  .get(isAuthenticatedUser, getUserIncomeStatementAdmin);
 
 module.exports = router;
 
