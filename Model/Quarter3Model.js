@@ -79,6 +79,14 @@ const Quarter3Model = mongoose.Schema({
       required: true,
     },
   },
+  "No of Clients per day": {
+    type: Number,
+    required: true,
+  },
+  "Average Price": {
+    type: Number,
+    required: true,
+  },
   event: {
     type: String,
     required: true,

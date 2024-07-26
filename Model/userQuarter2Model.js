@@ -88,6 +88,14 @@ const userQuarter2 = mongoose.Schema({
     type: Number,
     required: true,
   },
+  "No of Clients per day": {
+    type: Number,
+    required: true,
+  },
+  "Average Price": {
+    type: Number,
+    required: true,
+  },
   event: {
     type: String,
     required: true,

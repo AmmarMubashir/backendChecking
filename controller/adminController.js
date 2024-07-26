@@ -175,7 +175,7 @@ exports.updateQuarter2 = async (req, res) => {
   try {
     const data = req.body;
 
-    console.log("QUARTER2", data);
+    // console.log("QUARTER2", data);
 
     let quarter2Data = {
       option1: {
@@ -202,6 +202,8 @@ exports.updateQuarter2 = async (req, res) => {
         netProfit:
           data.option3.income - (data.option3.cost + data.option3.otherCost),
       },
+      "No of Clients per day": data["No of Clients per day"],
+      "Average Price": data["Average Price"],
       event: data.event,
     };
 
@@ -247,6 +249,8 @@ exports.updateQuarter3 = async (req, res) => {
         netProfit:
           data.option3.income - (data.option3.cost + data.option3.otherCost),
       },
+      "No of Clients per day": data["No of Clients per day"],
+      "Average Price": data["Average Price"],
       event: data.event,
     };
 
@@ -308,6 +312,114 @@ exports.getUserIncomeStatementAdmin = async (req, res) => {
 
     res.status(201).json(incomeStatement);
   } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+exports.UpdateUserIncomeStatementAdmin = async (req, res) => {
+  try {
+    const data = req.body;
+    const incomeStatement = await userIncome.findOne({ id: req.params.id });
+    incomeStatement.income.forEach((item, index) => {
+      item.Revenues["Total Revenue"] -= item["Revenues"]["Additional Income"];
+      item.Revenues["Total Revenue"] +=
+        data[index]["Revenues"]["Additional Income"];
+      item.Revenues["Additional Income"] =
+        data[index]["Revenues"]["Additional Income"];
+      item["Expenses And Costs"]["Total Cost And Expenses"] -=
+        item["Expenses And Costs"]["Additional Cost"];
+      item["Expenses And Costs"]["Total Cost And Expenses"] +=
+        data[index]["Expenses And Costs"]["Additional Cost"];
+      item["Expenses And Costs"]["Additional Cost"] =
+        data[index]["Expenses And Costs"]["Additional Cost"];
+    });
+
+    // let newData = incomeStatement.income;
+    // newData.forEach((item, index) => {
+    //   item = {
+    //     ...item,
+    //     EBITIDA:
+    //       item.Revenues["Total Revenue"] -
+    //       item["Expenses And Costs"]["Total Cost And Expenses"],
+    //     Depreciation: newData[index]["Depreciation"],
+    //     EBIT:
+    //       item.Revenues["Total Revenue"] -
+    //       item["Expenses And Costs"]["Total Cost And Expenses"] +
+    //       newData[index]["Depreciation"],
+    //     Interest: newData[index]["Interest"],
+    //     "PRETAX INCOME":
+    //       item.Revenues["Total Revenue"] -
+    //       item["Expenses And Costs"]["Total Cost And Expenses"] +
+    //       newData[index]["Depreciation"] -
+    //       newData[index]["Interest"],
+    //     "Net Operating Loss":
+    //       item.Revenues["Total Revenue"] -
+    //         item["Expenses And Costs"]["Total Cost And Expenses"] +
+    //         newData[index]["Depreciation"] -
+    //         newData[index]["Interest"] <
+    //       0
+    //         ? item.Revenues["Total Revenue"] -
+    //           item["Expenses And Costs"]["Total Cost And Expenses"] +
+    //           newData[index]["Depreciation"] -
+    //           newData[index]["Interest"] +
+    //           0
+    //         : 0,
+    //   };
+
+    //   // console.log("ITEM", item["PRETAX INCOME"]);
+
+    //   item = {
+    //     ...item,
+    //     "Use Of Net Operating Loss":
+    //       item["Net Operating Loss"] < 0
+    //         ? 0
+    //         : Math.min(item["PRETAX INCOME"], item["Net Operating Loss"]),
+    //   };
+    //   item = {
+    //     ...item,
+    //     "Taxable Income":
+    //       item["PRETAX INCOME"] - item["Use Of Net Operating Loss"] < 0
+    //         ? 0
+    //         : item["PRETAX INCOME"] - item["Use Of Net Operating Loss"],
+    //     "Income Tax Expense": newData[index]["Income Tax Expense"],
+    //   };
+
+    //   item = {
+    //     ...item,
+    //     "NET INCOME": item["PRETAX INCOME"] - item["Income Tax Expense"],
+    //   };
+    // });
+
+    incomeStatement.income.forEach((item, index) => {
+      item.EBITIDA =
+        item.Revenues["Total Revenue"] -
+        item["Expenses And Costs"]["Total Cost And Expenses"];
+      item.Depreciation = data[index].Depreciation;
+      item.EBIT = item.EBITIDA + item.Depreciation;
+      item.Interest = data[index].Interest;
+      item["PRETAX INCOME"] = item.EBIT - item.Interest;
+      item["Net Operating Loss"] =
+        item["PRETAX INCOME"] < 0 ? item["PRETAX INCOME"] : 0;
+      item["Use Of Net Operating Loss"] =
+        item["Net Operating Loss"] < 0
+          ? 0
+          : Math.min(item["PRETAX INCOME"], item["Net Operating Loss"]);
+      item["Taxable Income"] =
+        item["PRETAX INCOME"] - item["Use Of Net Operating Loss"] < 0
+          ? 0
+          : item["PRETAX INCOME"] - item["Use Of Net Operating Loss"];
+      item["Income Tax Expense"] = data[index]["Income Tax Expense"];
+      item["NET INCOME"] = item["PRETAX INCOME"] - item["Income Tax Expense"];
+    });
+
+    await incomeStatement.save();
+    // console.log(incomeStatement.income[0]);
+    // console.log(req.params.id);
+    // const incomeStatement = await userIncome.findOne({ id: req.params.id });
+
+    res.status(201).json(incomeStatement);
+  } catch (error) {
+    console.log("Error in updating user income by admin", error.message);
     res.status(400).json({ message: error.message });
   }
 };

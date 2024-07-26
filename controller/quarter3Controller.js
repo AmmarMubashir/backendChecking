@@ -63,6 +63,8 @@ exports.createQuarter3ForUser = async (req, res) => {
           data.option3.income - (data.option3.cost + data.option3.otherCost),
       },
       totalProfit: totalAmount,
+      "No of Clients per day": data["No of Clients per day"],
+      "Average Price": data["Average Price"],
       event: data.event,
     };
 

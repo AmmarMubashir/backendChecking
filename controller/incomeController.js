@@ -84,7 +84,11 @@ exports.createIncomeStatementForUser = async (req, res) => {
         let data;
         data = {
           Revenues: {
-            "Sales From Home": incomeData[index]["Revenues"]["Sales From Home"],
+            "Sales From Home":
+              quarters[index]["No of Clients per day"] *
+              30 *
+              3 *
+              quarters[index]["Average Price"],
             "Additional Income":
               incomeData[index]["Revenues"]["Additional Income"],
             Opportunities: opportunities,
@@ -261,7 +265,7 @@ exports.updateIncomeStatementForUser = async (req, res) => {
         OtherCost += quarter3.option1.otherCost;
       }
       if (quarter3.option2.selected) {
-        opportunities += quarter3.option2.cost;
+        opportunities += quarter3.option2.income;
         opportunityCost += quarter3.option2.cost;
         OtherCost += quarter3.option2.otherCost;
       }
@@ -276,7 +280,11 @@ exports.updateIncomeStatementForUser = async (req, res) => {
       let data;
       data = {
         Revenues: {
-          "Sales From Home": incomeData[1]["Revenues"]["Sales From Home"],
+          "Sales From Home":
+            quarter3["No of Clients per day"] *
+            30 *
+            3 *
+            quarter3["Average Price"],
           "Additional Income": incomeData[1]["Revenues"]["Additional Income"],
           Opportunities: opportunities,
           Grants: incomeData[1]["Revenues"]["Grants"],
