@@ -22,6 +22,14 @@ const Quarter1Schema = mongoose.Schema({
     type: Number,
     default: 5000,
   },
+  "No of Clients per day": {
+    type: Number,
+    default: 20,
+  },
+  "Average Price": {
+    type: Number,
+    default: 4,
+  },
 });
 
 module.exports = mongoose.model("Quarter1", Quarter1Schema);

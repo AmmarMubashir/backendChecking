@@ -19,7 +19,7 @@ exports.editIncomeStatement = async (req, res) => {
       }
     );
 
-    console.log(incomeStatement);
+    // console.log(incomeStatement);
 
     res.status(201).json(incomeStatement);
   } catch (error) {
@@ -29,8 +29,27 @@ exports.editIncomeStatement = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find();
-    res.status(200).json(users);
+    const teams = await Quarter1.find();
+
+    // const promises = users.map(async (item) => {
+    //   console.log(item);
+    //   const team = await Quarter1.findOne({ id: item._id });
+    //   let teanName = team.name;
+    //   let email = item.email;
+    //   let userId = item.id;
+
+    //   return { teanName, email, userId };
+    // });
+
+    // Promise.all(promises)
+    //   .then((data) => {
+    //     console.log(data);
+    //     res.status(200).json(data);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
+    res.status(200).json(teams);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -272,9 +291,10 @@ exports.getAllIncomeStatements = async (req, res) => {
     // console.log(incomeStatements);
 
     const promises = incomeStatements.map(async (item) => {
-      const team = await User.findById(item.id);
+      const user = await User.findById(item.id);
+      const team = await Quarter1.findOne({ id: item.id });
       let name = team.name;
-      let email = team.email;
+      let email = user.email;
       let revenue = item.income.reduce(
         (acc, current) => acc + current["Revenues"]["Total Revenue"],
         0
@@ -285,15 +305,12 @@ exports.getAllIncomeStatements = async (req, res) => {
         0
       );
 
-      // let revenue = item.income[0]["Revenues"]["Total Revenue"];
-      // let cost =
-      //   item.income[0]["Expenses And Costs"]["Total Cost And Expenses"];
-
       return { name, email, revenue, cost }; // Return an object with data
     });
 
     Promise.all(promises)
       .then((data) => {
+        // console.log(data);
         res.status(200).json(data);
       })
       .catch((error) => {
