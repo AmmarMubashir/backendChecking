@@ -1,12 +1,12 @@
-const Quarter1 = require("../Model/QuarterModel");
+const Startup = require("../Model/StartupModel");
 const IncomeStatement = require("../Model/IncomeStatementModel");
 const User = require("../Model/userModel");
+const Quarter1 = require("../Model/Quarter1Model");
 const Quarter2 = require("../Model/Quarter2Model");
-const Quarter3 = require("../Model/Quarter3Model");
 const userIncome = require("../Model/userIncomeModel");
 const userModel = require("../Model/userModel");
-const userQuarter2Model = require("../Model/userQuarter2Model");
-const userQuarter3 = require("../Model/userQuarter3Model");
+const userQuarter1Model = require("../Model/userQuarter1Model");
+const userQuarter2 = require("../Model/userQuarter2Model");
 
 exports.editIncomeStatement = async (req, res) => {
   try {
@@ -29,7 +29,7 @@ exports.editIncomeStatement = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const teams = await Quarter1.find();
+    const teams = await Startup.find();
 
     // const promises = users.map(async (item) => {
     //   console.log(item);
@@ -55,15 +55,32 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
+exports.getIndividualStartupAdmin = async (req, res) => {
+  try {
+    const startup = await Startup.findOne({ id: req.params.id });
+
+    // if (!startup) {
+    //   return res.status(404).json({ message: "Startup not found" });
+    // }
+
+    return res.status(201).json({
+      data: startup,
+      message: "Startup data shown successfully",
+    });
+  } catch (error) {
+    console.log("Error in getting startup", error.message);
+    res.status(500).json({ message: "Error in getting the startup data" });
+  }
+};
 exports.getIndividualQuarter1Admin = async (req, res) => {
   try {
-    const quarter1 = await Quarter1.findOne({ id: req.params.id });
+    const quarter1 = await userQuarter1Model.findOne({ id: req.params.id });
 
     // if (!quarter1) {
     //   return res.status(404).json({ message: "Quarter1 not found" });
     // }
 
-    return res.status(201).json({
+    return res.status(200).json({
       data: quarter1,
       message: "Quarter1 data shown successfully",
     });
@@ -72,9 +89,10 @@ exports.getIndividualQuarter1Admin = async (req, res) => {
     res.status(500).json({ message: "Error in getting the quarter1 data" });
   }
 };
+
 exports.getIndividualQuarter2Admin = async (req, res) => {
   try {
-    const quarter2 = await userQuarter2Model.findOne({ id: req.params.id });
+    const quarter2 = await userQuarter2.findOne({ id: req.params.id });
 
     // if (!quarter2) {
     //   return res.status(404).json({ message: "Quarter2 not found" });
@@ -85,26 +103,51 @@ exports.getIndividualQuarter2Admin = async (req, res) => {
       message: "Quarter2 data shown successfully",
     });
   } catch (error) {
-    console.log("Error in getting quarter1", error.message);
-    res.status(500).json({ message: "Error in getting the quarter1 data" });
+    console.log("Error in getting quarter2", error.message);
+    res.status(500).json({ message: "Error in getting the quarter2 data" });
   }
 };
 
-exports.getIndividualQuarter3Admin = async (req, res) => {
+exports.createQuarter1 = async (req, res) => {
   try {
-    const quarter3 = await userQuarter3.findOne({ id: req.params.id });
+    const data = req.body;
+    // console.log(data.option1.description);
+    let quarter1Data = {
+      option1: {
+        description: data.option1.description,
+        cost: data.option1.cost,
+        otherCost: data.option1.otherCost,
+        income: data.option1.income,
+        netProfit:
+          data.option1.income - (data.option1.cost + data.option1.otherCost),
+      },
+      option2: {
+        description: data.option2.description,
+        cost: data.option2.cost,
+        otherCost: data.option2.otherCost,
+        income: data.option2.income,
+        netProfit:
+          data.option2.income - (data.option2.cost + data.option2.otherCost),
+      },
+      option3: {
+        description: data.option3.description,
+        cost: data.option3.cost,
+        otherCost: data.option3.otherCost,
+        income: data.option3.income,
+        netProfit:
+          data.option3.income - (data.option3.cost + data.option3.otherCost),
+      },
+      "No of Clients per day": data["No of Clients per day"],
+      "Average Price": data["Average Price"],
+      event: data.event,
+    };
 
-    // if (!quarter3) {
-    //   return res.status(404).json({ message: "Quarter3 not found" });
-    // }
+    const quarter1 = await Quarter1.create(quarter1Data);
 
-    return res.status(200).json({
-      data: quarter3,
-      message: "Quarter3 data shown successfully",
-    });
+    res.status(201).json(quarter1);
   } catch (error) {
-    console.log("Error in getting quarter3", error.message);
-    res.status(500).json({ message: "Error in getting the quarter3 data" });
+    console.log("Error in creating quarter1", error.message);
+    res.status(500).json({ message: "Error in creating the quarter1 data" });
   }
 };
 
@@ -149,11 +192,13 @@ exports.createQuarter2 = async (req, res) => {
   }
 };
 
-exports.createQuarter3 = async (req, res) => {
+exports.updateQuarter1 = async (req, res) => {
   try {
     const data = req.body;
-    // console.log(data.option1.description);
-    let quarter3Data = {
+
+    // console.log("QUARTER1", data);
+
+    let quarter1Data = {
       option1: {
         description: data.option1.description,
         cost: data.option1.cost,
@@ -178,15 +223,19 @@ exports.createQuarter3 = async (req, res) => {
         netProfit:
           data.option3.income - (data.option3.cost + data.option3.otherCost),
       },
+      "No of Clients per day": data["No of Clients per day"],
+      "Average Price": data["Average Price"],
       event: data.event,
     };
 
-    const quarter3 = await Quarter3.create(quarter3Data);
+    const quarter1 = await Quarter1.findOneAndUpdate({}, quarter1Data, {
+      new: true,
+    });
 
-    res.status(201).json(quarter3);
+    res.status(201).json(quarter1);
   } catch (error) {
-    console.log("Error in creating quarter3", error.message);
-    res.status(500).json({ message: "Error in creating the quarter3 data" });
+    console.log("Error in Updating quarter1", error.message);
+    res.status(500).json({ message: "Error in Updatind the quarter1 data" });
   }
 };
 
@@ -237,53 +286,6 @@ exports.updateQuarter2 = async (req, res) => {
   }
 };
 
-exports.updateQuarter3 = async (req, res) => {
-  try {
-    const data = req.body;
-
-    // console.log("QUARTER3", data);
-
-    let quarter3Data = {
-      option1: {
-        description: data.option1.description,
-        cost: data.option1.cost,
-        otherCost: data.option1.otherCost,
-        income: data.option1.income,
-        netProfit:
-          data.option1.income - (data.option1.cost + data.option1.otherCost),
-      },
-      option2: {
-        description: data.option2.description,
-        cost: data.option2.cost,
-        otherCost: data.option2.otherCost,
-        income: data.option2.income,
-        netProfit:
-          data.option2.income - (data.option2.cost + data.option2.otherCost),
-      },
-      option3: {
-        description: data.option3.description,
-        cost: data.option3.cost,
-        otherCost: data.option3.otherCost,
-        income: data.option3.income,
-        netProfit:
-          data.option3.income - (data.option3.cost + data.option3.otherCost),
-      },
-      "No of Clients per day": data["No of Clients per day"],
-      "Average Price": data["Average Price"],
-      event: data.event,
-    };
-
-    const quarter3 = await Quarter3.findOneAndUpdate({}, quarter3Data, {
-      new: true,
-    });
-
-    res.status(201).json(quarter3);
-  } catch (error) {
-    console.log("Error in Updating quarter3", error.message);
-    res.status(500).json({ message: "Error in Updatind the quarter3 data" });
-  }
-};
-
 exports.getAllIncomeStatements = async (req, res) => {
   try {
     const incomeStatements = await userIncome.find();
@@ -292,20 +294,19 @@ exports.getAllIncomeStatements = async (req, res) => {
 
     const promises = incomeStatements.map(async (item) => {
       const user = await User.findById(item.id);
-      const team = await Quarter1.findOne({ id: item.id });
+      const team = await Startup.findOne({ id: item.id });
       let name = team.name;
       let email = user.email;
-      let revenue = item.income.reduce(
-        (acc, current) => acc + current["Revenues"]["Total Revenue"],
+      let Income = item.income.reduce(
+        (acc, current) => acc + current["Income"]["Total Income"],
         0
       );
-      let cost = item.income.reduce(
-        (acc, current) =>
-          acc + current["Expenses And Costs"]["Total Cost And Expenses"],
+      let Expenditure = item.income.reduce(
+        (acc, current) => acc + current["Expenditure"]["Total Expenditure"],
         0
       );
 
-      return { name, email, revenue, cost }; // Return an object with data
+      return { name, email, Income, Expenditure }; // Return an object with data
     });
 
     Promise.all(promises)
@@ -338,17 +339,16 @@ exports.UpdateUserIncomeStatementAdmin = async (req, res) => {
     const data = req.body;
     const incomeStatement = await userIncome.findOne({ id: req.params.id });
     incomeStatement.income.forEach((item, index) => {
-      item.Revenues["Total Revenue"] -= item["Revenues"]["Additional Income"];
-      item.Revenues["Total Revenue"] +=
-        data[index]["Revenues"]["Additional Income"];
-      item.Revenues["Additional Income"] =
-        data[index]["Revenues"]["Additional Income"];
-      item["Expenses And Costs"]["Total Cost And Expenses"] -=
-        item["Expenses And Costs"]["Additional Cost"];
-      item["Expenses And Costs"]["Total Cost And Expenses"] +=
-        data[index]["Expenses And Costs"]["Additional Cost"];
-      item["Expenses And Costs"]["Additional Cost"] =
-        data[index]["Expenses And Costs"]["Additional Cost"];
+      item.Income["Total Income"] -= item["Income"]["Additional income"];
+      item.Income["Total Income"] += data[index]["Income"]["Additional income"];
+      item.Income["Additional income"] =
+        data[index]["Income"]["Additional income"];
+      item["Expenditure"]["Total Expenditure"] -=
+        item["Expenditure"]["Additional cost"];
+      item["Expenditure"]["Total Expenditure"] +=
+        data[index]["Expenditure"]["Additional cost"];
+      item["Expenditure"]["Additional cost"] =
+        data[index]["Expenditure"]["Additional cost"];
     });
 
     // let newData = incomeStatement.income;
@@ -356,27 +356,27 @@ exports.UpdateUserIncomeStatementAdmin = async (req, res) => {
     //   item = {
     //     ...item,
     //     EBITIDA:
-    //       item.Revenues["Total Revenue"] -
-    //       item["Expenses And Costs"]["Total Cost And Expenses"],
+    //       item.Income["Total Income"] -
+    //       item["Expenditure"]["Total Expenditure"],
     //     Depreciation: newData[index]["Depreciation"],
     //     EBIT:
-    //       item.Revenues["Total Revenue"] -
-    //       item["Expenses And Costs"]["Total Cost And Expenses"] +
+    //       item.Income["Total Income"] -
+    //       item["Expenditure"]["Total Expenditure"] +
     //       newData[index]["Depreciation"],
     //     Interest: newData[index]["Interest"],
     //     "PRETAX INCOME":
-    //       item.Revenues["Total Revenue"] -
-    //       item["Expenses And Costs"]["Total Cost And Expenses"] +
+    //       item.Income["Total Income"] -
+    //       item["Expenditure"]["Total Expenditure"] +
     //       newData[index]["Depreciation"] -
     //       newData[index]["Interest"],
     //     "Net Operating Loss":
-    //       item.Revenues["Total Revenue"] -
-    //         item["Expenses And Costs"]["Total Cost And Expenses"] +
+    //       item.Income["Total Income"] -
+    //         item["Expenditure"]["Total Expenditure"] +
     //         newData[index]["Depreciation"] -
     //         newData[index]["Interest"] <
     //       0
-    //         ? item.Revenues["Total Revenue"] -
-    //           item["Expenses And Costs"]["Total Cost And Expenses"] +
+    //         ? item.Income["Total Income"] -
+    //           item["Expenditure"]["Total Expenditure"] +
     //           newData[index]["Depreciation"] -
     //           newData[index]["Interest"] +
     //           0
@@ -409,8 +409,7 @@ exports.UpdateUserIncomeStatementAdmin = async (req, res) => {
 
     incomeStatement.income.forEach((item, index) => {
       item.EBITIDA =
-        item.Revenues["Total Revenue"] -
-        item["Expenses And Costs"]["Total Cost And Expenses"];
+        item.Income["Total Income"] - item["Expenditure"]["Total Expenditure"];
       item.Depreciation = data[index].Depreciation;
       item.EBIT = item.EBITIDA + item.Depreciation;
       item.Interest = data[index].Interest;

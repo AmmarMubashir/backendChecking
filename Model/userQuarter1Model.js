@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
-const Quarter3Model = mongoose.Schema({
+const userQuarter1 = mongoose.Schema({
+  id: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+    required: true,
+  },
   option1: {
     selected: {
       type: Boolean,
@@ -79,6 +84,10 @@ const Quarter3Model = mongoose.Schema({
       required: true,
     },
   },
+  totalProfit: {
+    type: Number,
+    required: true,
+  },
   "No of Clients per day": {
     type: Number,
     required: true,
@@ -93,4 +102,4 @@ const Quarter3Model = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Quarter3", Quarter3Model);
+module.exports = mongoose.model("userQuarter1", userQuarter1);

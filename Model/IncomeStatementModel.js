@@ -3,100 +3,92 @@ const mongoose = require("mongoose");
 const IncomeStatementModel = mongoose.Schema({
   income: [
     {
-      Revenues: {
-        "Sales From Home": {
+      Income: {
+        "Sales from Home": {
           type: Number,
           required: [true, "Please provide sales from home"],
         },
-        Opportunities: {
-          type: Number,
-          default: 0,
-        },
-        "Additional Income": {
+        "Additional income": {
           type: Number,
           required: [true, "Please provide additional income"],
         },
-        Grants: {
+        "Grants and donations": {
           type: Number,
-          required: [true, "Please provide grants"],
+          required: [true, "Please provide grants and donations"],
         },
         Loans: {
           type: Number,
           required: [true, "Please provide loans"],
         },
-        "Other Income": {
+        "Income from opportunities": {
           type: Number,
-          required: [true, "Please provide other income"],
+          default: 0,
         },
-        "Total Revenue": {
+        "Total Income": {
           type: Number,
-          required: [true, "Please provide total revenue"],
+          required: [true, "Please provide total income"],
         },
       },
-      "Expenses And Costs": {
-        "Cost Of Goods Sold": {
+      Expenditure: {
+        Purchases: {
           type: Number,
-          required: [true, "Please provide cost of goods sold"],
-        },
-        Lease: {
-          type: Number,
-          required: [true, "Please provide lease"],
+          required: [true, "Please provide purchases"],
         },
         Marketing: {
           type: Number,
           required: [true, "Please provide marketing"],
         },
-        "Budjeted Salaries": {
+        "Salaries and wages": {
           type: Number,
-          required: [true, "Please provide budgeted salaries"],
-        },
-        "Extra Expenditure": {
-          type: Number,
-          required: [true, "Please provide data expenditure"],
-        },
-        "Delivery Van Expenses": {
-          type: Number,
-          required: [true, "Please provide delivery van expenses"],
-        },
-        "Initial Expenditure": {
-          type: Number,
-          required: [true, "Please provide initial expenditure"],
-        },
-        "Opportunity Costs": {
-          type: Number,
-          required: [true, "Please provide opportunity cost"],
-        },
-        Travel: {
-          type: Number,
-          required: [true, "Please provide travel"],
+          required: [true, "Please provide salaries and wages"],
         },
         Training: {
           type: Number,
           required: [true, "Please provide training"],
         },
-        "Loan Repayment": {
+        "Expenses from opportunities": {
+          type: Number,
+          required: [true, "Please provide expenses from opportunities"],
+        },
+        "Expenses from other sources": {
+          type: Number,
+          required: [true, "Please provide expenses from other sources"],
+        },
+        "Travel cost": {
+          type: Number,
+          required: [true, "Please provide travel cost"],
+        },
+        Telephone: {
+          type: Number,
+          required: [true, "Please provide telephone"],
+        },
+        Utilities: {
+          type: Number,
+          required: [true, "Please provide utilities"],
+        },
+        "Loan repayment": {
           type: Number,
           required: [true, "Please provide loan repayment"],
         },
-        "Professional Fees": {
+        "Rent and rates": {
+          type: Number,
+          required: [true, "Please provide loan rent and rates"],
+        },
+        "Professional fees": {
           type: Number,
           required: [true, "Please provide professional fees"],
         },
-        "Sundry Expenses": {
+        "Sundry costs": {
           type: Number,
-          required: [true, "Please provide sun dry expenses"],
+          required: [true, "Please provide sundry cost"],
         },
-        "Other Cost": {
-          type: Number,
-          required: [true, "Please provide other costs"],
-        },
-        "Additional Cost": {
+        "Additional cost": {
           type: Number,
           required: [true, "Please provide additional costs"],
         },
-        "Total Cost And Expenses": {
+        "Total Expenditure": {
           type: Number,
-          required: [true, "Please provide total cost and expenses"],
+          required: [true, "Please provide total expenditure"],
         },
       },
       EBITIDA: {

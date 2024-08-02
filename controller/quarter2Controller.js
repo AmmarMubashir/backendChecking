@@ -1,5 +1,6 @@
+const Quarter1Model = require("../Model/Quarter1Model");
 const Quarter2 = require("../Model/Quarter2Model");
-const Quarter1 = require("../Model/QuarterModel");
+const userQuarter1Model = require("../Model/userQuarter1Model");
 const userQuarter2 = require("../Model/userQuarter2Model");
 
 exports.getQuarter2 = async (req, res) => {
@@ -16,10 +17,10 @@ exports.createQuarter2ForUser = async (req, res) => {
   try {
     const data = req.body;
     // console.log(data.option1.description);
-    const quarter1 = await Quarter1.findOne({ id: req.user._id });
+    const quarter1 = await userQuarter1Model.findOne({ id: req.user._id });
 
     // console.log(quarter1.budjet);
-    let totalAmount = quarter1.budjet;
+    let totalAmount = quarter1.totalProfit;
 
     if (data.option1.selected) {
       totalAmount += data.option1.netProfit;
@@ -71,8 +72,8 @@ exports.createQuarter2ForUser = async (req, res) => {
 
     res.status(201).json(quarter2);
   } catch (error) {
-    console.log("Error in creating quarter2", error.message);
-    res.status(500).json({ message: "Error in creating the quarter2 data" });
+    console.log("Error in creating quarter1", error.message);
+    res.status(500).json({ message: "Error in creating the quarter1 data" });
   }
 };
 

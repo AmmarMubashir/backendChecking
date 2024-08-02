@@ -1,26 +1,25 @@
-const Quarter2Model = require("../Model/Quarter2Model");
-const Quarter3 = require("../Model/Quarter3Model");
-const userQuarter2Model = require("../Model/userQuarter2Model");
-const userQuarter3 = require("../Model/userQuarter3Model");
+const Quarter1 = require("../Model/Quarter1Model");
+const Startup = require("../Model/StartupModel");
+const userQuarter1 = require("../Model/userQuarter1Model");
 
-exports.getQuarter3 = async (req, res) => {
+exports.getQuarter1 = async (req, res) => {
   try {
-    const quarter3 = await Quarter3.find();
-    res.status(200).json(quarter3);
+    const quarter1 = await Quarter1.find();
+    res.status(200).json(quarter1);
   } catch (error) {
-    console.log("Error in getting quarter3", error.message);
-    res.status(500).json({ message: "Error in getting the quarter3 data" });
+    console.log("Error in getting quarter1", error.message);
+    res.status(500).json({ message: "Error in getting the quarter1 data" });
   }
 };
 
-exports.createQuarter3ForUser = async (req, res) => {
+exports.createQuarter1ForUser = async (req, res) => {
   try {
     const data = req.body;
     // console.log(data.option1.description);
-    const quarter2 = await userQuarter2Model.findOne({ id: req.user._id });
+    const startup = await Startup.findOne({ id: req.user._id });
 
-    // console.log(quarter1.budjet);
-    let totalAmount = quarter2.totalProfit;
+    // console.log(startup.budjet);
+    let totalAmount = startup.budjet;
 
     if (data.option1.selected) {
       totalAmount += data.option1.netProfit;
@@ -33,7 +32,7 @@ exports.createQuarter3ForUser = async (req, res) => {
     }
     console.log(totalAmount);
 
-    let quarter3Data = {
+    let quarter1Data = {
       id: req.user._id,
       option1: {
         selected: data.option1.selected,
@@ -68,33 +67,33 @@ exports.createQuarter3ForUser = async (req, res) => {
       event: data.event,
     };
 
-    const quarter3 = await userQuarter3.create(quarter3Data);
+    const quarter1 = await userQuarter1.create(quarter1Data);
 
-    res.status(201).json(quarter3);
+    res.status(201).json(quarter1);
   } catch (error) {
-    console.log("Error in creating quarter2", error.message);
-    res.status(500).json({ message: "Error in creating the quarter2 data" });
+    console.log("Error in creating quarter1", error.message);
+    res.status(500).json({ message: "Error in creating the quarter1 data" });
   }
 };
 
-exports.getQuarter3ForUser = async (req, res) => {
+exports.getQuarter1ForUser = async (req, res) => {
   try {
-    const quarter3 = await userQuarter3.findOne({ id: req.user._id });
-    res.status(200).json(quarter3);
+    const quarter1 = await userQuarter1.findOne({ id: req.user._id });
+    res.status(200).json(quarter1);
   } catch (error) {
-    console.log("Error in getting quarter3", error.message);
-    res.status(500).json({ message: "Error in getting the quarter3 data" });
+    console.log("Error in getting quarter1", error.message);
+    res.status(500).json({ message: "Error in getting the quarter1 data" });
   }
 };
 
-exports.getQuarter3ForUserById = async (req, res) => {
+exports.getQuarter1ForUserById = async (req, res) => {
   try {
     const { id } = req.params;
     console.log(id);
-    const quarter3 = await userQuarter3.findById(id);
-    res.status(200).json(quarter3);
+    const quarter1 = await userQuarter1.findById(id);
+    res.status(200).json(quarter1);
   } catch (error) {
-    console.log("Error in getting quarter3", error.message);
-    res.status(500).json({ message: "Error in getting the quarter3 data" });
+    console.log("Error in getting quarter1", error.message);
+    res.status(500).json({ message: "Error in getting the quarter1 data" });
   }
 };

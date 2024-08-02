@@ -20,11 +20,14 @@ app.use(express.json());
 
 // imports
 const user = require("./routes/userRoutes");
-const quarter = require("./routes/quarterRoutes");
+const startup = require("./routes/startupRoutes");
 const income = require("./routes/IncomeRoutes");
 const admin = require("./routes/adminRoute");
+const quarter1 = require("./routes/quarter1Route");
 const quarter2 = require("./routes/quarter2Route");
-const quarter3 = require("./routes/quarter3Route");
+const employee = require("./routes/employeeRoute");
+const quarter1EmpInfo = require("./routes/quarter1EmployeeRoutes");
+const quarter2EmpInfo = require("./routes/quarter2EmployeeRoutes");
 
 app.get("/", (req, res) => {
   res.send("Welcome");
@@ -34,10 +37,12 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/api/v1", user);
-app.use("/api/v1", quarter);
+app.use("/api/v1", startup);
+app.use("/api/v1/quarter1", quarter1);
 app.use("/api/v1/quarter2", quarter2);
-app.use("/api/v1/quarter3", quarter3);
 app.use("/api/v1", income);
 app.use("/api/v1", admin);
-
+app.use("/api/v1/employee", employee);
+app.use("/api/v1/quarter1Emp", quarter1EmpInfo);
+app.use("/api/v1/quarter2Emp", quarter2EmpInfo);
 module.exports = app;

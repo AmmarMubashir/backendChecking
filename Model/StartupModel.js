@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const Quarter1Schema = mongoose.Schema({
+const StartupSchema = mongoose.Schema({
   id: {
     type: mongoose.Schema.ObjectId,
     ref: "User",
@@ -9,10 +9,6 @@ const Quarter1Schema = mongoose.Schema({
   name: {
     type: String,
     required: [true, "Please Enter your team name"],
-  },
-  members: {
-    type: Number,
-    required: [true, "Please Enter your team member number"],
   },
   location: {
     type: String,
@@ -32,4 +28,4 @@ const Quarter1Schema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Quarter1", Quarter1Schema);
+module.exports = mongoose.model("Startup", StartupSchema);

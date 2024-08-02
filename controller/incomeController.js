@@ -1,7 +1,9 @@
 const IncomeStatement = require("../Model/IncomeStatementModel");
+const userQuarter1 = require("../Model/userQuarter1Model");
 const userQuarter2 = require("../Model/userQuarter2Model");
-const userQuarter3 = require("../Model/userQuarter3Model");
 const UserIncomeStatement = require("../Model/userIncomeModel");
+const Quarter1Emp = require("../Model/quarter1EmployeeModel");
+const Quarter2Emp = require("../Model/quarter2EmployeeModel");
 
 // Create income statement
 
@@ -27,31 +29,24 @@ exports.getIncomeStatement = async (req, res) => {
   }
 };
 
-exports.createIncomeStatement = async (req, res) => {
-  try {
-    console.log(req.body);
-    // console.log("HEllo");
-    const incomeStatement = await IncomeStatement.create(req.body);
-
-    res.status(201).json({ incomeStatement });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
 exports.createIncomeStatementForUser = async (req, res) => {
   try {
-    let quarter2 = await userQuarter2.findOne({ id: req.user._id });
+    let quarter1 = await userQuarter1.findOne({ id: req.user._id });
+    const quarter1Emp = await Quarter1Emp.findOne({ id: req.user._id });
 
-    // console.log(quarter3);
+    let total = quarter1Emp.positions.reduce(
+      (acc, curr) => acc + curr["Salaries per quarter"],
+      0
+    );
+    // console.log(quarter2);
 
     let incomeData = await IncomeStatement.find({});
     incomeData = incomeData[0].income;
 
     let quarters = [];
 
-    if (quarter2) {
-      quarters.push(quarter2);
+    if (quarter1) {
+      quarters.push(quarter1);
     }
 
     let incomes = [];
@@ -79,23 +74,23 @@ exports.createIncomeStatementForUser = async (req, res) => {
 
         console.log("OTHERCOST", OtherCost);
 
-        // console.log(incomeData[index].Revenues["Sales From Home"]);
+        // console.log(incomeData[index].Income["Sales From Home"]);
 
         let data;
         data = {
-          Revenues: {
-            "Sales From Home":
+          Income: {
+            "Sales from Home":
               quarters[index]["No of Clients per day"] *
               30 *
               3 *
               quarters[index]["Average Price"],
-            "Additional Income":
-              incomeData[index]["Revenues"]["Additional Income"],
-            Opportunities: opportunities,
-            Grants: incomeData[index]["Revenues"]["Grants"],
-            Loans: incomeData[index]["Revenues"]["Loans"],
-            "Other Income": incomeData[index]["Revenues"]["Other Income"],
-            "Total Revenue": 0,
+            "Additional income":
+              incomeData[index]["Income"]["Additional income"],
+            "Grants and donations":
+              incomeData[index]["Income"]["Grants and donations"],
+            Loans: incomeData[index]["Income"]["Loans"],
+            "Income from opportunities": opportunities,
+            "Total Income": 0,
           },
         };
 
@@ -103,35 +98,30 @@ exports.createIncomeStatementForUser = async (req, res) => {
 
         let totalRevenue = 0,
           totalExpensesAndCosts = 0;
-        for (let key in data.Revenues) {
-          totalRevenue += data.Revenues[key];
+        for (let key in data.Income) {
+          totalRevenue += data.Income[key];
         }
 
         let CostAndExpenses = {
-          "Cost Of Goods Sold":
-            incomeData[index]["Expenses And Costs"]["Cost Of Goods Sold"],
-          Lease: incomeData[index]["Expenses And Costs"].Lease,
-          Marketing: incomeData[index]["Expenses And Costs"].Marketing,
-          "Budjeted Salaries":
-            incomeData[index]["Expenses And Costs"]["Budjeted Salaries"],
-          "Extra Expenditure":
-            incomeData[index]["Expenses And Costs"]["Extra Expenditure"],
-          "Delivery Van Expenses":
-            incomeData[index]["Expenses And Costs"]["Delivery Van Expenses"],
-          "Initial Expenditure":
-            incomeData[index]["Expenses And Costs"]["Initial Expenditure"],
-          "Opportunity Costs": opportunityCost,
-          Travel: incomeData[index]["Expenses And Costs"]["Travel"],
-          Training: incomeData[index]["Expenses And Costs"]["Training"],
-          "Loan Repayment":
-            incomeData[index]["Expenses And Costs"]["Loan Repayment"],
-          "Professional Fees":
-            incomeData[index]["Expenses And Costs"]["Professional Fees"],
-          "Sundry Expenses":
-            incomeData[index]["Expenses And Costs"]["Sundry Expenses"],
-          "Additional Cost":
-            incomeData[index]["Expenses And Costs"]["Additional Cost"],
-          "Other Cost": OtherCost,
+          Purchases:
+            0.23 * incomeData[index]["Income"]["Income from opportunities"] +
+            incomeData[index]["Income"]["Sales from Home"] +
+            incomeData[index]["Income"]["Additional income"],
+          Marketing: incomeData[index]["Expenditure"].Marketing,
+          "Salaries and wages": total,
+          Training: incomeData[index]["Expenditure"]["Training"],
+          "Expenses from opportunities": opportunityCost,
+          "Expenses from other sources": OtherCost,
+          "Travel cost": incomeData[index]["Expenditure"]["Travel cost"],
+          Telephone: incomeData[index]["Expenditure"]["Telephone"],
+          Utilities: incomeData[index]["Expenditure"]["Utilities"],
+          "Loan repayment": incomeData[index]["Expenditure"]["Loan repayment"],
+          "Rent and rates": incomeData[index]["Expenditure"]["Rent and rates"],
+          "Professional fees":
+            incomeData[index]["Expenditure"]["Professional fees"],
+          "Sundry costs": incomeData[index]["Expenditure"]["Sundry costs"],
+          "Additional cost":
+            incomeData[index]["Expenditure"]["Additional cost"],
         };
 
         for (let key1 in CostAndExpenses) {
@@ -140,42 +130,42 @@ exports.createIncomeStatementForUser = async (req, res) => {
 
         CostAndExpenses = {
           ...CostAndExpenses,
-          "Total Cost And Expenses": totalExpensesAndCosts,
+          "Total Expenditure": totalExpensesAndCosts,
         };
 
         // // console.log(totalRevenue);
-        data.Revenues = {
-          ...data.Revenues,
-          "Total Revenue": totalRevenue,
+        data.Income = {
+          ...data.Income,
+          "Total Income": totalRevenue,
         };
 
-        data["Expenses And Costs"] = CostAndExpenses;
+        data["Expenditure"] = CostAndExpenses;
         // console.log(data);
 
         data = {
           ...data,
           EBITIDA:
-            data.Revenues["Total Revenue"] -
-            data["Expenses And Costs"]["Total Cost And Expenses"],
+            data.Income["Total Income"] -
+            data["Expenditure"]["Total Expenditure"],
           Depreciation: incomeData[index]["Depreciation"],
           EBIT:
-            data.Revenues["Total Revenue"] -
-            data["Expenses And Costs"]["Total Cost And Expenses"] +
+            data.Income["Total Income"] -
+            data["Expenditure"]["Total Expenditure"] +
             incomeData[index]["Depreciation"],
           Interest: incomeData[index]["Interest"],
           "PRETAX INCOME":
-            data.Revenues["Total Revenue"] -
-            data["Expenses And Costs"]["Total Cost And Expenses"] +
+            data.Income["Total Income"] -
+            data["Expenditure"]["Total Expenditure"] +
             incomeData[index]["Depreciation"] -
             incomeData[index]["Interest"],
           "Net Operating Loss":
-            data.Revenues["Total Revenue"] -
-              data["Expenses And Costs"]["Total Cost And Expenses"] +
+            data.Income["Total Income"] -
+              data["Expenditure"]["Total Expenditure"] +
               incomeData[index]["Depreciation"] -
               incomeData[index]["Interest"] <
             0
-              ? data.Revenues["Total Revenue"] -
-                data["Expenses And Costs"]["Total Cost And Expenses"] +
+              ? data.Income["Total Income"] -
+                data["Expenditure"]["Total Expenditure"] +
                 incomeData[index]["Depreciation"] -
                 incomeData[index]["Interest"] +
                 0
@@ -237,7 +227,13 @@ exports.updateIncomeStatementForUser = async (req, res) => {
   try {
     console.log("HIII");
     // res.send("HII");
-    let quarter3 = await userQuarter3.findOne({ id: req.user._id });
+    let quarter2 = await userQuarter2.findOne({ id: req.user._id });
+    const quarter2Emp = await Quarter2Emp.findOne({ id: req.user._id });
+
+    let total = quarter2Emp.positions.reduce(
+      (acc, curr) => acc + curr["Salaries per quarter"],
+      0
+    );
     let userIncome = await UserIncomeStatement.findOne({ id: req.user._id });
 
     userIncome = userIncome.income;
@@ -249,81 +245,75 @@ exports.updateIncomeStatementForUser = async (req, res) => {
 
     // let quarters = [];
 
-    // if (quarter3) {
-    //   quarters.push(quarter3);
+    // if (quarter2) {
+    //   quarters.push(quarter2);
     // }
 
     let incomes;
-    if (quarter3) {
+    if (quarter2) {
       let opportunities = 0;
       let opportunityCost = 0;
       let OtherCost = 0;
 
-      if (quarter3.option1.selected) {
-        opportunities += quarter3.option1.income;
-        opportunityCost += quarter3.option1.cost;
-        OtherCost += quarter3.option1.otherCost;
+      if (quarter2.option1.selected) {
+        opportunities += quarter2.option1.income;
+        opportunityCost += quarter2.option1.cost;
+        OtherCost += quarter2.option1.otherCost;
       }
-      if (quarter3.option2.selected) {
-        opportunities += quarter3.option2.income;
-        opportunityCost += quarter3.option2.cost;
-        OtherCost += quarter3.option2.otherCost;
+      if (quarter2.option2.selected) {
+        opportunities += quarter2.option2.income;
+        opportunityCost += quarter2.option2.cost;
+        OtherCost += quarter2.option2.otherCost;
       }
-      if (quarter3.option3.selected) {
-        opportunities += quarter3.option3.income;
-        opportunityCost += quarter3.option3.cost;
-        OtherCost += quarter3.option3.otherCost;
+      if (quarter2.option3.selected) {
+        opportunities += quarter2.option3.income;
+        opportunityCost += quarter2.option3.cost;
+        OtherCost += quarter2.option3.otherCost;
       }
 
       console.log("OTHERCOST", OtherCost);
 
       let data;
       data = {
-        Revenues: {
-          "Sales From Home":
-            quarter3["No of Clients per day"] *
+        Income: {
+          "Sales from Home":
+            quarter2["No of Clients per day"] *
             30 *
             3 *
-            quarter3["Average Price"],
-          "Additional Income": incomeData[1]["Revenues"]["Additional Income"],
-          Opportunities: opportunities,
-          Grants: incomeData[1]["Revenues"]["Grants"],
-          Loans: incomeData[1]["Revenues"]["Loans"],
-          "Other Income": incomeData[1]["Revenues"]["Other Income"],
-          "Total Revenue": 0,
+            quarter2["Average Price"],
+          "Additional income": incomeData[1]["Income"]["Additional income"],
+          "Grants and donations":
+            incomeData[1]["Income"]["Grants and donations"],
+          Loans: incomeData[1]["Income"]["Loans"],
+          "Income from opportunities": opportunities,
+          "Total Income": 0,
         },
       };
 
       let totalRevenue = 0,
         totalExpensesAndCosts = 0;
-      for (let key in data.Revenues) {
-        totalRevenue += data.Revenues[key];
+      for (let key in data.Income) {
+        totalRevenue += data.Income[key];
       }
 
       let CostAndExpenses = {
-        "Cost Of Goods Sold":
-          incomeData[1]["Expenses And Costs"]["Cost Of Goods Sold"],
-        Lease: incomeData[1]["Expenses And Costs"].Lease,
-        Marketing: incomeData[1]["Expenses And Costs"].Marketing,
-        "Budjeted Salaries":
-          incomeData[1]["Expenses And Costs"]["Budjeted Salaries"],
-        "Extra Expenditure":
-          incomeData[1]["Expenses And Costs"]["Extra Expenditure"],
-        "Delivery Van Expenses":
-          incomeData[1]["Expenses And Costs"]["Delivery Van Expenses"],
-        "Initial Expenditure":
-          incomeData[1]["Expenses And Costs"]["Initial Expenditure"],
-        "Opportunity Costs": opportunityCost,
-        Travel: incomeData[1]["Expenses And Costs"]["Travel"],
-        Training: incomeData[1]["Expenses And Costs"]["Training"],
-        "Loan Repayment": incomeData[1]["Expenses And Costs"]["Loan Repayment"],
-        "Professional Fees":
-          incomeData[1]["Expenses And Costs"]["Professional Fees"],
-        "Sundry Expenses":
-          incomeData[1]["Expenses And Costs"]["Sundry Expenses"],
-        "Additional Cost":
-          incomeData[1]["Expenses And Costs"]["Additional Cost"],
-        "Other Cost": OtherCost,
+        Purchases:
+          0.23 * incomeData[1]["Income"]["Income from opportunities"] +
+          incomeData[1]["Income"]["Sales from Home"] +
+          incomeData[1]["Income"]["Additional income"],
+        Marketing: incomeData[1]["Expenditure"].Marketing,
+        "Salaries and wages": total,
+        Training: incomeData[1]["Expenditure"]["Training"],
+        "Expenses from opportunities": opportunityCost,
+        "Expenses from other sources": OtherCost,
+        "Travel cost": incomeData[1]["Expenditure"]["Travel cost"],
+        Telephone: incomeData[1]["Expenditure"]["Telephone"],
+        Utilities: incomeData[1]["Expenditure"]["Utilities"],
+        "Loan repayment": incomeData[1]["Expenditure"]["Loan repayment"],
+        "Rent and rates": incomeData[1]["Expenditure"]["Rent and rates"],
+        "Professional fees": incomeData[1]["Expenditure"]["Professional fees"],
+        "Sundry costs": incomeData[1]["Expenditure"]["Sundry costs"],
+        "Additional cost": incomeData[1]["Expenditure"]["Additional cost"],
       };
 
       for (let key1 in CostAndExpenses) {
@@ -332,40 +322,40 @@ exports.updateIncomeStatementForUser = async (req, res) => {
 
       CostAndExpenses = {
         ...CostAndExpenses,
-        "Total Cost And Expenses": totalExpensesAndCosts,
+        "Total Expenditure": totalExpensesAndCosts,
       };
 
-      data.Revenues = {
-        ...data.Revenues,
-        "Total Revenue": totalRevenue,
+      data.Income = {
+        ...data.Income,
+        "Total Income": totalRevenue,
       };
 
-      data["Expenses And Costs"] = CostAndExpenses;
+      data["Expenditure"] = CostAndExpenses;
 
       data = {
         ...data,
         EBITIDA:
-          data.Revenues["Total Revenue"] -
-          data["Expenses And Costs"]["Total Cost And Expenses"],
+          data.Income["Total Income"] -
+          data["Expenditure"]["Total Expenditure"],
         Depreciation: incomeData[1]["Depreciation"],
         EBIT:
-          data.Revenues["Total Revenue"] -
-          data["Expenses And Costs"]["Total Cost And Expenses"] +
+          data.Income["Total Income"] -
+          data["Expenditure"]["Total Expenditure"] +
           incomeData[1]["Depreciation"],
         Interest: incomeData[1]["Interest"],
         "PRETAX INCOME":
-          data.Revenues["Total Revenue"] -
-          data["Expenses And Costs"]["Total Cost And Expenses"] +
+          data.Income["Total Income"] -
+          data["Expenditure"]["Total Expenditure"] +
           incomeData[1]["Depreciation"] -
           incomeData[1]["Interest"],
         "Net Operating Loss":
-          data.Revenues["Total Revenue"] -
-            data["Expenses And Costs"]["Total Cost And Expenses"] +
+          data.Income["Total Income"] -
+            data["Expenditure"]["Total Expenditure"] +
             incomeData[1]["Depreciation"] -
             incomeData[1]["Interest"] <
           0
-            ? data.Revenues["Total Revenue"] -
-              data["Expenses And Costs"]["Total Cost And Expenses"] +
+            ? data.Income["Total Income"] -
+              data["Expenditure"]["Total Expenditure"] +
               incomeData[1]["Depreciation"] -
               incomeData[1]["Interest"] +
               0
