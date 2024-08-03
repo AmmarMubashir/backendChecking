@@ -3,10 +3,13 @@ const IncomeStatement = require("../Model/IncomeStatementModel");
 const User = require("../Model/userModel");
 const Quarter1 = require("../Model/Quarter1Model");
 const Quarter2 = require("../Model/Quarter2Model");
+const Quarter3 = require("../Model/Quarter3Model");
+const Quarter4 = require("../Model/Quarter4Model");
 const userIncome = require("../Model/userIncomeModel");
-const userModel = require("../Model/userModel");
 const userQuarter1Model = require("../Model/userQuarter1Model");
 const userQuarter2 = require("../Model/userQuarter2Model");
+const userQuarter3 = require("../Model/userQuarter3Model");
+const userQuarter4 = require("../Model/userQuarter4Model");
 
 exports.editIncomeStatement = async (req, res) => {
   try {
@@ -107,6 +110,44 @@ exports.getIndividualQuarter2Admin = async (req, res) => {
     res.status(500).json({ message: "Error in getting the quarter2 data" });
   }
 };
+exports.getIndividualQuarter3Admin = async (req, res) => {
+  try {
+    const quarter3 = await userQuarter3.findOne({ id: req.params.id });
+
+    // if (!quarter3) {
+    //   return res.status(404).json({ message: "Quarter3 not found" });
+    // }
+
+    return res.status(200).json({
+      data: quarter3,
+      message: "Quarter3 data shown successfully",
+    });
+  } catch (error) {
+    console.log("Error in getting quarter3", error.message);
+    res.status(500).json({ message: "Error in getting the quarter3 data" });
+  }
+};
+
+exports.getIndividualQuarter4Admin = async (req, res) => {
+  try {
+    const quarter4 = await userQuarter4.findOne({ id: req.params.id });
+    // if (!quarter4) {
+    //   console.log("quarter4");
+    // }
+
+    // if (!quarter4) {
+    //   return res.status(404).json({ message: "Quarter4 not found" });
+    // }
+
+    return res.status(200).json({
+      data: quarter4,
+      message: "Quarter4 data shown successfully",
+    });
+  } catch (error) {
+    console.log("Error in getting quarter4", error.message);
+    res.status(500).json({ message: "Error in getting the quarter4 data" });
+  }
+};
 
 exports.createQuarter1 = async (req, res) => {
   try {
@@ -180,6 +221,8 @@ exports.createQuarter2 = async (req, res) => {
         netProfit:
           data.option3.income - (data.option3.cost + data.option3.otherCost),
       },
+      "No of Clients per day": data["No of Clients per day"],
+      "Average Price": data["Average Price"],
       event: data.event,
     };
 
@@ -189,6 +232,91 @@ exports.createQuarter2 = async (req, res) => {
   } catch (error) {
     console.log("Error in creating quarter2", error.message);
     res.status(500).json({ message: "Error in creating the quarter2 data" });
+  }
+};
+exports.createQuarter3 = async (req, res) => {
+  try {
+    const data = req.body;
+    // console.log(data.option1.description);
+    let quarter3Data = {
+      option1: {
+        description: data.option1.description,
+        cost: data.option1.cost,
+        otherCost: data.option1.otherCost,
+        income: data.option1.income,
+        netProfit:
+          data.option1.income - (data.option1.cost + data.option1.otherCost),
+      },
+      option2: {
+        description: data.option2.description,
+        cost: data.option2.cost,
+        otherCost: data.option2.otherCost,
+        income: data.option2.income,
+        netProfit:
+          data.option2.income - (data.option2.cost + data.option2.otherCost),
+      },
+      option3: {
+        description: data.option3.description,
+        cost: data.option3.cost,
+        otherCost: data.option3.otherCost,
+        income: data.option3.income,
+        netProfit:
+          data.option3.income - (data.option3.cost + data.option3.otherCost),
+      },
+      "No of Clients per day": data["No of Clients per day"],
+      "Average Price": data["Average Price"],
+      event: data.event,
+    };
+
+    const quarter3 = await Quarter3.create(quarter3Data);
+
+    res.status(201).json(quarter3);
+  } catch (error) {
+    console.log("Error in creating quarter3", error.message);
+    res.status(500).json({ message: "Error in creating the quarter3 data" });
+  }
+};
+
+exports.createQuarter4 = async (req, res) => {
+  try {
+    const data = req.body;
+    // console.log(data.option1.description);
+    let quarter4Data = {
+      option1: {
+        description: data.option1.description,
+        cost: data.option1.cost,
+        otherCost: data.option1.otherCost,
+        income: data.option1.income,
+        netProfit:
+          data.option1.income - (data.option1.cost + data.option1.otherCost),
+      },
+      option2: {
+        description: data.option2.description,
+        cost: data.option2.cost,
+        otherCost: data.option2.otherCost,
+        income: data.option2.income,
+        netProfit:
+          data.option2.income - (data.option2.cost + data.option2.otherCost),
+      },
+      option3: {
+        description: data.option3.description,
+        cost: data.option3.cost,
+        otherCost: data.option3.otherCost,
+        income: data.option3.income,
+        netProfit:
+          data.option3.income - (data.option3.cost + data.option3.otherCost),
+      },
+      "No of Clients per day": data["No of Clients per day"],
+      "Average Price": data["Average Price"],
+      event: data.event,
+    };
+
+    const quarter4 = await Quarter4.create(quarter4Data);
+
+    res.status(201).json(quarter4);
+  } catch (error) {
+    console.log("Error in creating quarter4", error.message);
+    res.status(500).json({ message: "Error in creating the quarter4 data" });
   }
 };
 
@@ -283,6 +411,99 @@ exports.updateQuarter2 = async (req, res) => {
   } catch (error) {
     console.log("Error in Updating quarter2", error.message);
     res.status(500).json({ message: "Error in Updatind the quarter2 data" });
+  }
+};
+exports.updateQuarter3 = async (req, res) => {
+  try {
+    const data = req.body;
+
+    // console.log("QUARTER2", data);
+
+    let quarter3Data = {
+      option1: {
+        description: data.option1.description,
+        cost: data.option1.cost,
+        otherCost: data.option1.otherCost,
+        income: data.option1.income,
+        netProfit:
+          data.option1.income - (data.option1.cost + data.option1.otherCost),
+      },
+      option2: {
+        description: data.option2.description,
+        cost: data.option2.cost,
+        otherCost: data.option2.otherCost,
+        income: data.option2.income,
+        netProfit:
+          data.option2.income - (data.option2.cost + data.option2.otherCost),
+      },
+      option3: {
+        description: data.option3.description,
+        cost: data.option3.cost,
+        otherCost: data.option3.otherCost,
+        income: data.option3.income,
+        netProfit:
+          data.option3.income - (data.option3.cost + data.option3.otherCost),
+      },
+      "No of Clients per day": data["No of Clients per day"],
+      "Average Price": data["Average Price"],
+      event: data.event,
+    };
+
+    const quarter3 = await Quarter3.findOneAndUpdate({}, quarter3Data, {
+      new: true,
+    });
+
+    res.status(201).json(quarter3);
+  } catch (error) {
+    console.log("Error in Updating quarter3", error.message);
+    res.status(500).json({ message: "Error in Updatind the quarter3 data" });
+  }
+};
+
+exports.updateQuarter4 = async (req, res) => {
+  try {
+    const data = req.body;
+
+    // console.log("QUARTER2", data);
+
+    let quarter4Data = {
+      option1: {
+        description: data.option1.description,
+        cost: data.option1.cost,
+        otherCost: data.option1.otherCost,
+        income: data.option1.income,
+        netProfit:
+          data.option1.income - (data.option1.cost + data.option1.otherCost),
+      },
+      option2: {
+        description: data.option2.description,
+        cost: data.option2.cost,
+        otherCost: data.option2.otherCost,
+        income: data.option2.income,
+        netProfit:
+          data.option2.income - (data.option2.cost + data.option2.otherCost),
+      },
+      option3: {
+        description: data.option3.description,
+        cost: data.option3.cost,
+        otherCost: data.option3.otherCost,
+        income: data.option3.income,
+        netProfit:
+          data.option3.income - (data.option3.cost + data.option3.otherCost),
+      },
+      "No of Clients per day": data["No of Clients per day"],
+      "Average Price": data["Average Price"],
+      event: data.event,
+    };
+
+    const quarter4 = await Quarter4.findOneAndUpdate({}, quarter4Data, {
+      new: true,
+    });
+
+    res.status(201).json(quarter4);
+  } catch (error) {
+    console.log("Error in Updating quarter4", error.message);
+    res.status(500).json({ message: "Error in Updatind the quarter4 data" });
   }
 };
 

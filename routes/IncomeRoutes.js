@@ -5,6 +5,8 @@ const {
   createIncomeStatementForUser,
   getUserIncomeStatement,
   updateIncomeStatementForUser,
+  updateIncomeStatementForQuarter3,
+  updateIncomeStatementForQuarter4,
 } = require("../controller/incomeController");
 
 const { isAuthenticatedUser } = require("../middleware/auth");
@@ -19,6 +21,12 @@ router
 router
   .route("/user/updateincomeStatement")
   .put(isAuthenticatedUser, updateIncomeStatementForUser);
+router
+  .route("/user/updateincomeStatementQuarter3")
+  .put(isAuthenticatedUser, updateIncomeStatementForQuarter3);
+router
+  .route("/user/updateincomeStatementQuarter4")
+  .put(isAuthenticatedUser, updateIncomeStatementForQuarter4);
 router
   .route("/user/incomeStatement")
   .get(isAuthenticatedUser, getUserIncomeStatement);
