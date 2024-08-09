@@ -94,6 +94,8 @@ exports.createIncomeStatementForUser = async (req, res) => {
               incomeData[index]["Income"]["Grants and donations"],
             Loans: incomeData[index]["Income"]["Loans"],
             "Income from opportunities": opportunities,
+            "Extra income from opportunities":
+              incomeData[index]["Income"]["Extra income from opportunities"],
             "Total Income": 0,
           },
         };
@@ -115,6 +117,8 @@ exports.createIncomeStatementForUser = async (req, res) => {
           "Salaries and wages": total,
           Training: incomeData[index]["Expenditure"]["Training"],
           "Expenses from opportunities": opportunityCost,
+          "Extra cost from opportunities":
+            incomeData[index]["Expenditure"]["Extra cost from opportunities"],
           "Expenses from other sources": OtherCost,
           "Travel cost": incomeData[index]["Expenditure"]["Travel cost"],
           Telephone: incomeData[index]["Expenditure"]["Telephone"],
@@ -290,6 +294,8 @@ exports.updateIncomeStatementForUser = async (req, res) => {
             incomeData[1]["Income"]["Grants and donations"],
           Loans: incomeData[1]["Income"]["Loans"],
           "Income from opportunities": opportunities,
+          "Extra income from opportunities":
+            incomeData[1]["Income"]["Extra income from opportunities"],
           "Total Income": 0,
         },
       };
@@ -309,6 +315,8 @@ exports.updateIncomeStatementForUser = async (req, res) => {
         "Salaries and wages": total,
         Training: incomeData[1]["Expenditure"]["Training"],
         "Expenses from opportunities": opportunityCost,
+        "Extra cost from opportunities":
+          incomeData[1]["Expenditure"]["Extra cost from opportunities"],
         "Expenses from other sources": OtherCost,
         "Travel cost": incomeData[1]["Expenditure"]["Travel cost"],
         Telephone: incomeData[1]["Expenditure"]["Telephone"],
@@ -479,6 +487,8 @@ exports.updateIncomeStatementForQuarter3 = async (req, res) => {
             incomeData[2]["Income"]["Grants and donations"],
           Loans: incomeData[2]["Income"]["Loans"],
           "Income from opportunities": opportunities,
+          "Extra income from opportunities":
+            incomeData[2]["Income"]["Extra income from opportunities"],
           "Total Income": 0,
         },
       };
@@ -498,6 +508,8 @@ exports.updateIncomeStatementForQuarter3 = async (req, res) => {
         "Salaries and wages": total,
         Training: incomeData[2]["Expenditure"]["Training"],
         "Expenses from opportunities": opportunityCost,
+        "Extra cost from opportunities":
+          incomeData[2]["Expenditure"]["Extra cost from opportunities"],
         "Expenses from other sources": OtherCost,
         "Travel cost": incomeData[2]["Expenditure"]["Travel cost"],
         Telephone: incomeData[2]["Expenditure"]["Telephone"],
@@ -668,6 +680,8 @@ exports.updateIncomeStatementForQuarter4 = async (req, res) => {
             incomeData[3]["Income"]["Grants and donations"],
           Loans: incomeData[3]["Income"]["Loans"],
           "Income from opportunities": opportunities,
+          "Extra income from opportunities":
+            incomeData[3]["Income"]["Extra income from opportunities"],
           "Total Income": 0,
         },
       };
@@ -687,6 +701,8 @@ exports.updateIncomeStatementForQuarter4 = async (req, res) => {
         "Salaries and wages": total,
         Training: incomeData[3]["Expenditure"]["Training"],
         "Expenses from opportunities": opportunityCost,
+        "Extra cost from opportunities":
+          incomeData[3]["Expenditure"]["Extra cost from opportunities"],
         "Expenses from other sources": OtherCost,
         "Travel cost": incomeData[3]["Expenditure"]["Travel cost"],
         Telephone: incomeData[3]["Expenditure"]["Telephone"],

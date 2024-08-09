@@ -511,7 +511,7 @@ exports.getAllIncomeStatements = async (req, res) => {
   try {
     const incomeStatements = await userIncome.find();
 
-    // console.log(incomeStatements);
+    console.log("HELLO DATA");
 
     const promises = incomeStatements.map(async (item) => {
       const user = await User.findById(item.id);
@@ -522,12 +522,51 @@ exports.getAllIncomeStatements = async (req, res) => {
         (acc, current) => acc + current["Income"]["Total Income"],
         0
       );
+
       let Expenditure = item.income.reduce(
         (acc, current) => acc + current["Expenditure"]["Total Expenditure"],
         0
       );
+      let incomeFromOpportunities = item.income.reduce(
+        (acc, current) => acc + current["Income"]["Income from opportunities"],
+        0
+      );
+      let additionalIncome = item.income.reduce(
+        (acc, current) => acc + current["Income"]["Additional income"],
+        0
+      );
+      let extraIncome = item.income.reduce(
+        (acc, current) =>
+          acc + current["Income"]["Extra income from opportunities"],
+        0
+      );
+      let expensesFromOpportunities = item.income.reduce(
+        (acc, current) =>
+          acc + current["Expenditure"]["Expenses from opportunities"],
+        0
+      );
+      let additionalCost = item.income.reduce(
+        (acc, current) => acc + current["Expenditure"]["Additional cost"],
+        0
+      );
+      let extraCost = item.income.reduce(
+        (acc, current) =>
+          acc + current["Expenditure"]["Extra cost from opportunities"],
+        0
+      );
 
-      return { name, email, Income, Expenditure }; // Return an object with data
+      return {
+        name,
+        email,
+        Income,
+        Expenditure,
+        "Income from opportunities": incomeFromOpportunities,
+        "Expenses from opportunities": expensesFromOpportunities,
+        "Additional Cost": additionalCost,
+        "Additional Income": additionalIncome,
+        "Extra income from opportunities": extraIncome,
+        "Extra cost from opportunities": extraCost,
+      }; // Return an object with data
     });
 
     Promise.all(promises)
@@ -564,12 +603,27 @@ exports.UpdateUserIncomeStatementAdmin = async (req, res) => {
       item.Income["Total Income"] += data[index]["Income"]["Additional income"];
       item.Income["Additional income"] =
         data[index]["Income"]["Additional income"];
+
+      item.Income["Total Income"] -=
+        item["Income"]["Extra income from opportunities"];
+      item.Income["Total Income"] +=
+        data[index]["Income"]["Extra income from opportunities"];
+      item.Income["Extra income from opportunities"] =
+        data[index]["Income"]["Extra income from opportunities"];
+
       item["Expenditure"]["Total Expenditure"] -=
         item["Expenditure"]["Additional cost"];
       item["Expenditure"]["Total Expenditure"] +=
         data[index]["Expenditure"]["Additional cost"];
       item["Expenditure"]["Additional cost"] =
         data[index]["Expenditure"]["Additional cost"];
+
+      item["Expenditure"]["Total Expenditure"] -=
+        item["Expenditure"]["Extra cost from opportunities"];
+      item["Expenditure"]["Total Expenditure"] +=
+        data[index]["Expenditure"]["Extra cost from opportunities"];
+      item["Expenditure"]["Extra cost from opportunities"] =
+        data[index]["Expenditure"]["Extra cost from opportunities"];
     });
 
     // let newData = incomeStatement.income;

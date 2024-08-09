@@ -29,6 +29,10 @@ const UserIncomeStatementModel = mongoose.Schema({
           type: Number,
           default: 0,
         },
+        "Extra income from opportunities": {
+          type: Number,
+          default: 0,
+        },
         "Total Income": {
           type: Number,
           required: [true, "Please provide total income"],
@@ -54,6 +58,10 @@ const UserIncomeStatementModel = mongoose.Schema({
         "Expenses from opportunities": {
           type: Number,
           required: [true, "Please provide expenses from opportunities"],
+        },
+        "Extra cost from opportunities": {
+          type: Number,
+          default: 0,
         },
         "Expenses from other sources": {
           type: Number,
