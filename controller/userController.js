@@ -1,6 +1,8 @@
 const User = require("../Model/userModel");
 const bcrypt = require("bcryptjs");
 const generateTokenAndSetCookies = require("../utils/generateToken");
+const sendEmail = require("../utils/sendEmail");
+const crypto = require("crypto");
 
 exports.signupUser = async (req, res) => {
   try {
@@ -45,6 +47,7 @@ exports.signupUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
   try {
+    console.log("Check login");
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
@@ -82,4 +85,72 @@ exports.logoutUser = async (req, res) => {
     console.log("Error in logout controller", error.message);
     res.status(500).json({ error: "Internal server error" });
   }
+};
+
+exports.forgotPassword = async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  const token = crypto.randomBytes(20).toString("hex");
+  user.resetToken = token;
+  user.resetTokenExpiration = Date.now() + 3600000; // 1 hour
+  await user.save({ validateBeforeSave: false });
+
+  const resetLink = `${process.env.CLIENT_URL}/password/reset/${token}`;
+
+  const message = `Your password reset token is :- \n\n${resetLink} \n\n If you have not requested this email, then please ignore it 😊`;
+
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: "Bread & Butter Password recovery",
+      message,
+    });
+    res.status(200).json({
+      message: `Reset password email sent to ${user.email} successfully`,
+    });
+  } catch (error) {
+    user.resetToken = undefined;
+    user.resetTokenExpiration = undefined;
+
+    await user.save({ validateBeforeSave: false });
+    console.log("Error in sending password reset email", error.message);
+    res.status(500).json({ error: "Failed to send password reset email" });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  console.log("HELLO Check");
+  const { token } = req.params;
+  const { password } = req.body;
+
+  const user = await User.findOne({
+    resetToken: token,
+    resetTokenExpiration: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  if (req.body.password !== req.body.confirmPassword) {
+    return res.status(400).json({ message: "Password doen not match" });
+  }
+
+  const cokkieToken = generateTokenAndSetCookies(user._id, res);
+  // console.log(cokkieToken);
+  // HASH password
+  const saLt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, saLt);
+
+  user.password = hashedPassword;
+  user.resetToken = undefined;
+  user.resetTokenExpiration = undefined;
+
+  await user.save({ validateBeforeSave: false });
+
+  res
+    .status(200)
+    .json({ data: user, cokkieToken, message: "Password reset successfully" });
 };

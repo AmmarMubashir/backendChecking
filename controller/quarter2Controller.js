@@ -16,6 +16,8 @@ exports.getQuarter2 = async (req, res) => {
 exports.createQuarter2ForUser = async (req, res) => {
   try {
     const data = req.body;
+
+    console.log(data);
     // console.log(data.option1.description);
     const quarter1 = await userQuarter1Model.findOne({ id: req.user._id });
 
@@ -72,7 +74,7 @@ exports.createQuarter2ForUser = async (req, res) => {
 
     res.status(201).json(quarter2);
   } catch (error) {
-    console.log("Error in creating quarter1", error.message);
+    console.log("Error in creating quarter2", error.message);
     res.status(500).json({ message: "Error in creating the quarter1 data" });
   }
 };
