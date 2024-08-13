@@ -14,10 +14,7 @@ const StartupSchema = mongoose.Schema({
     type: String,
     required: [true, "Please Enter your  location"],
   },
-  budjet: {
-    type: Number,
-    default: 5000,
-  },
+
   "No of Clients per day": {
     type: Number,
     default: 20,

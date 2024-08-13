@@ -353,6 +353,7 @@ exports.updateQuarter1 = async (req, res) => {
       },
       "No of Clients per day": data["No of Clients per day"],
       "Average Price": data["Average Price"],
+      budget: data.budget,
       event: data.event,
     };
 

@@ -79,6 +79,10 @@ const Quarter1Model = mongoose.Schema({
       required: true,
     },
   },
+  budget: {
+    type: Number,
+    default: 350,
+  },
   "No of Clients per day": {
     type: Number,
     required: true,

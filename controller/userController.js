@@ -12,7 +12,7 @@ exports.signupUser = async (req, res) => {
 
     if (existingUser) {
       return res.status(400).json({
-        error: "This email already exists",
+        message: "This email already exists",
       });
     }
 
@@ -29,11 +29,11 @@ exports.signupUser = async (req, res) => {
       await newUser.save();
     } else {
       res.status(400).json({
-        error: "Error in creating user",
+        message: "Error in creating user",
       });
     }
 
-    console.log("TOKENNN", token);
+    // console.log("TOKENNN", token);
     return res.status(201).json({
       data: newUser,
       token,
@@ -47,7 +47,7 @@ exports.signupUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
   try {
-    console.log("Check login");
+    // console.log("Check login");
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
@@ -58,7 +58,7 @@ exports.loginUser = async (req, res) => {
 
     if (!user || !isPasswordCorrect) {
       return res.status(400).json({
-        error: "Invalid credentials",
+        message: "Invalid credentials",
       });
     }
 
@@ -72,7 +72,7 @@ exports.loginUser = async (req, res) => {
   } catch (error) {
     console.log("Error in login controller", error.message);
     res.status(500).json({
-      error: "Internal server error",
+      message: "Internal server error",
     });
   }
 };
@@ -91,7 +91,7 @@ exports.forgotPassword = async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
-    return res.status(404).json({ message: "User not found" });
+    return res.status(404).json({ message: "User email does not exist" });
   }
   const token = crypto.randomBytes(20).toString("hex");
   user.resetToken = token;

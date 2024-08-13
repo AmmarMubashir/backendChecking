@@ -79,6 +79,7 @@ const Quarter2Model = mongoose.Schema({
       required: true,
     },
   },
+
   "No of Clients per day": {
     type: Number,
     required: true,

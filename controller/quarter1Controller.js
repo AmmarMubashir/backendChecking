@@ -16,10 +16,10 @@ exports.createQuarter1ForUser = async (req, res) => {
   try {
     const data = req.body;
     // console.log(data.option1.description);
-    const startup = await Startup.findOne({ id: req.user._id });
+    // const startup = await Startup.findOne({ id: req.user._id });
 
     // console.log(startup.budjet);
-    let totalAmount = startup.budjet;
+    let totalAmount = data.budget;
 
     if (data.option1.selected) {
       totalAmount += data.option1.netProfit;
