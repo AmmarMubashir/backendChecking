@@ -8,6 +8,14 @@ exports.signupUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
+    const allUsers = await User.find({});
+
+    if (allUsers.length > 7) {
+      return res.status(400).json({
+        message: "Limit exceed. Please try again later",
+      });
+    }
+
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
