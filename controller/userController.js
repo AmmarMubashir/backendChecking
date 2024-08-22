@@ -10,7 +10,7 @@ exports.signupUser = async (req, res) => {
 
     const allUsers = await User.find({});
 
-    if (allUsers.length > 7) {
+    if (allUsers.length > 6) {
       return res.status(400).json({
         message: "Limit exceed. Please try again later",
       });

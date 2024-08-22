@@ -10,6 +10,7 @@ const userQuarter1Model = require("../Model/userQuarter1Model");
 const userQuarter2 = require("../Model/userQuarter2Model");
 const userQuarter3 = require("../Model/userQuarter3Model");
 const userQuarter4 = require("../Model/userQuarter4Model");
+const StartupModel = require("../Model/StartupModel");
 
 exports.editIncomeStatement = async (req, res) => {
   try {
@@ -508,6 +509,83 @@ exports.updateQuarter4 = async (req, res) => {
   }
 };
 
+// exports.getAllIncomeStatements = async (req, res) => {
+//   try {
+//     const incomeStatements = await userIncome.find();
+
+//     console.log("HELLO DATA");
+
+//     const promises = incomeStatements.map(async (item) => {
+//       const user = await User.findById(item.id);
+//       const team = await Startup.findOne({ id: item.id });
+//       let name = team.name;
+//       let email = user.email;
+//       let Income = item.income.reduce(
+//         (acc, current) => acc + current["Income"]["Total Income"],
+//         0
+//       );
+
+//       let Expenditure = item.income.reduce(
+//         (acc, current) => acc + current["Expenditure"]["Total Expenditure"],
+//         0
+//       );
+//       let incomeFromOpportunities = item.income.reduce(
+//         (acc, current) => acc + current["Income"]["Income from opportunities"],
+//         0
+//       );
+//       let additionalIncome = item.income.reduce(
+//         (acc, current) => acc + current["Income"]["Additional income"],
+//         0
+//       );
+//       let extraIncome = item.income.reduce(
+//         (acc, current) =>
+//           acc + current["Income"]["Extra income from opportunities"],
+//         0
+//       );
+//       let expensesFromOpportunities = item.income.reduce(
+//         (acc, current) =>
+//           acc + current["Expenditure"]["Expenses from opportunities"],
+//         0
+//       );
+//       let additionalCost = item.income.reduce(
+//         (acc, current) => acc + current["Expenditure"]["Additional cost"],
+//         0
+//       );
+//       let extraCost = item.income.reduce(
+//         (acc, current) =>
+//           acc + current["Expenditure"]["Extra cost from opportunities"],
+//         0
+//       );
+
+//       return {
+//         name,
+//         email,
+//         Income,
+//         Expenditure,
+//         "Income from opportunities": incomeFromOpportunities,
+//         "Expenses from opportunities": expensesFromOpportunities,
+//         "Additional Cost": additionalCost,
+//         "Additional Income": additionalIncome,
+//         "Extra income from opportunities": extraIncome,
+//         "Extra cost from opportunities": extraCost,
+//       }; // Return an object with data
+//     });
+
+//     Promise.all(promises)
+//       .then((data) => {
+//         // console.log(data);
+//         res.status(200).json(data);
+//       })
+//       .catch((error) => {
+//         console.error(error); // Handle any errors
+//       });
+
+//     // console.log(GraphData);
+//   } catch (error) {
+//     res.status(400).json({ message: error.message });
+//   }
+// };
+
 exports.getAllIncomeStatements = async (req, res) => {
   try {
     const incomeStatements = await userIncome.find();
@@ -587,9 +665,10 @@ exports.getAllIncomeStatements = async (req, res) => {
 
 exports.getUserIncomeStatementAdmin = async (req, res) => {
   try {
-    const incomeStatement = await userIncome.findOne({ id: req.params.id });
+    const { income } = await userIncome.findOne({ id: req.params.id });
+    const { name } = await StartupModel.findOne({ id: req.params.id });
 
-    res.status(201).json(incomeStatement);
+    res.status(201).json({ income, name });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
