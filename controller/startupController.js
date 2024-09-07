@@ -2,11 +2,12 @@ const Startup = require("../Model/StartupModel");
 
 exports.uploadStartup = async (req, res) => {
   try {
-    const { name, location } = req.body;
+    const { name, members, location } = req.body;
 
     const startup = new Startup({
       id: req.user._id,
       name,
+      members,
       location,
     });
 

@@ -10,6 +10,10 @@ const StartupSchema = mongoose.Schema({
     type: String,
     required: [true, "Please Enter your team name"],
   },
+  members: {
+    type: Number,
+    required: [true, "Please provide no. of members"],
+  },
   location: {
     type: String,
     required: [true, "Please Enter your  location"],

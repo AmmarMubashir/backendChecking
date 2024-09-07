@@ -29,6 +29,7 @@ const quarter1EmpInfo = require("./routes/quarter1EmployeeRoutes");
 const quarter2EmpInfo = require("./routes/quarter2EmployeeRoutes");
 const quarter3EmpInfo = require("./routes/quarter3EmployeeRoutes");
 const quarter4EmpInfo = require("./routes/quarter4EmployeeRoutes");
+const roles = require("./routes/roleRoutes");
 
 app.get("/", (req, res) => {
   res.send("Welcome");
@@ -50,4 +51,5 @@ app.use("/api/v1/quarter1Emp", quarter1EmpInfo);
 app.use("/api/v1/quarter2Emp", quarter2EmpInfo);
 app.use("/api/v1/quarter3Emp", quarter3EmpInfo);
 app.use("/api/v1/quarter4Emp", quarter4EmpInfo);
+app.use("/api/v1/roles", roles);
 module.exports = app;
