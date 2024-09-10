@@ -85,7 +85,7 @@ exports.createIncomeStatementForUser = async (req, res) => {
           Income: {
             "Sales from Home":
               quarters[index]["No of Clients per day"] *
-              30 *
+              24 *
               3 *
               quarters[index]["Average Price"],
             "Additional income":
@@ -109,10 +109,7 @@ exports.createIncomeStatementForUser = async (req, res) => {
         }
 
         let CostAndExpenses = {
-          Purchases:
-            0.23 * incomeData[index]["Income"]["Income from opportunities"] +
-            incomeData[index]["Income"]["Sales from Home"] +
-            incomeData[index]["Income"]["Additional income"],
+          Purchases: incomeData[index]["Income"]["Sales from Home"] / 2,
           Marketing: incomeData[index]["Expenditure"].Marketing,
           "Salaries and wages": total,
           Training: incomeData[index]["Expenditure"]["Training"],
@@ -286,7 +283,7 @@ exports.updateIncomeStatementForUser = async (req, res) => {
         Income: {
           "Sales from Home":
             quarter2["No of Clients per day"] *
-            30 *
+            24 *
             3 *
             quarter2["Average Price"],
           "Additional income": incomeData[1]["Income"]["Additional income"],
@@ -307,10 +304,7 @@ exports.updateIncomeStatementForUser = async (req, res) => {
       }
 
       let CostAndExpenses = {
-        Purchases:
-          0.23 * incomeData[1]["Income"]["Income from opportunities"] +
-          incomeData[1]["Income"]["Sales from Home"] +
-          incomeData[1]["Income"]["Additional income"],
+        Purchases: incomeData[1]["Income"]["Sales from Home"] / 2,
         Marketing: incomeData[1]["Expenditure"].Marketing,
         "Salaries and wages": total,
         Training: incomeData[1]["Expenditure"]["Training"],
@@ -479,7 +473,7 @@ exports.updateIncomeStatementForQuarter3 = async (req, res) => {
         Income: {
           "Sales from Home":
             quarter3["No of Clients per day"] *
-            30 *
+            24 *
             3 *
             quarter3["Average Price"],
           "Additional income": incomeData[2]["Income"]["Additional income"],
@@ -500,10 +494,8 @@ exports.updateIncomeStatementForQuarter3 = async (req, res) => {
       }
 
       let CostAndExpenses = {
-        Purchases:
-          0.23 * incomeData[2]["Income"]["Income from opportunities"] +
-          incomeData[2]["Income"]["Sales from Home"] +
-          incomeData[2]["Income"]["Additional income"],
+        Purchases: incomeData[2]["Income"]["Sales from Home"] / 2,
+
         Marketing: incomeData[2]["Expenditure"].Marketing,
         "Salaries and wages": total,
         Training: incomeData[2]["Expenditure"]["Training"],
@@ -672,7 +664,7 @@ exports.updateIncomeStatementForQuarter4 = async (req, res) => {
         Income: {
           "Sales from Home":
             quarter4["No of Clients per day"] *
-            30 *
+            24 *
             3 *
             quarter4["Average Price"],
           "Additional income": incomeData[3]["Income"]["Additional income"],
@@ -693,10 +685,7 @@ exports.updateIncomeStatementForQuarter4 = async (req, res) => {
       }
 
       let CostAndExpenses = {
-        Purchases:
-          0.23 * incomeData[3]["Income"]["Income from opportunities"] +
-          incomeData[3]["Income"]["Sales from Home"] +
-          incomeData[3]["Income"]["Additional income"],
+        Purchases: incomeData[3]["Income"]["Sales from Home"] / 2,
         Marketing: incomeData[3]["Expenditure"].Marketing,
         "Salaries and wages": total,
         Training: incomeData[3]["Expenditure"]["Training"],
