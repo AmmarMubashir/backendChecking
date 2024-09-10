@@ -539,7 +539,7 @@ exports.updateQuarter4 = async (req, res) => {
 //       );
 //       let extraIncome = item.income.reduce(
 //         (acc, current) =>
-//           acc + current["Income"]["Extra income from opportunities"],
+//           acc + current["Income"]["Income from activities"],
 //         0
 //       );
 //       let expensesFromOpportunities = item.income.reduce(
@@ -553,7 +553,7 @@ exports.updateQuarter4 = async (req, res) => {
 //       );
 //       let extraCost = item.income.reduce(
 //         (acc, current) =>
-//           acc + current["Expenditure"]["Extra cost from opportunities"],
+//           acc + current["Expenditure"]["Costs from activities"],
 //         0
 //       );
 
@@ -566,8 +566,8 @@ exports.updateQuarter4 = async (req, res) => {
 //         "Expenses from opportunities": expensesFromOpportunities,
 //         "Additional Cost": additionalCost,
 //         "Additional Income": additionalIncome,
-//         "Extra income from opportunities": extraIncome,
-//         "Extra cost from opportunities": extraCost,
+//         "Income from activities": extraIncome,
+//         "Costs from activities": extraCost,
 //       }; // Return an object with data
 //     });
 
@@ -616,7 +616,7 @@ exports.getAllIncomeStatements = async (req, res) => {
       );
       let extraIncome = item.income.reduce(
         (acc, current) =>
-          acc + current["Income"]["Extra income from opportunities"],
+          acc + current["Income"]["Income from activities"],
         0
       );
       let expensesFromOpportunities = item.income.reduce(
@@ -630,7 +630,7 @@ exports.getAllIncomeStatements = async (req, res) => {
       );
       let extraCost = item.income.reduce(
         (acc, current) =>
-          acc + current["Expenditure"]["Extra cost from opportunities"],
+          acc + current["Expenditure"]["Costs from activities"],
         0
       );
 
@@ -643,8 +643,8 @@ exports.getAllIncomeStatements = async (req, res) => {
         "Expenses from opportunities": expensesFromOpportunities,
         "Additional Cost": additionalCost,
         "Additional Income": additionalIncome,
-        "Extra income from opportunities": extraIncome,
-        "Extra cost from opportunities": extraCost,
+        "Income from activities": extraIncome,
+        "Costs from activities": extraCost,
       }; // Return an object with data
     });
 
@@ -685,11 +685,11 @@ exports.UpdateUserIncomeStatementAdmin = async (req, res) => {
         data[index]["Income"]["Additional income"];
 
       item.Income["Total Income"] -=
-        item["Income"]["Extra income from opportunities"];
+        item["Income"]["Income from activities"];
       item.Income["Total Income"] +=
-        data[index]["Income"]["Extra income from opportunities"];
-      item.Income["Extra income from opportunities"] =
-        data[index]["Income"]["Extra income from opportunities"];
+        data[index]["Income"]["Income from activities"];
+      item.Income["Income from activities"] =
+        data[index]["Income"]["Income from activities"];
 
       item["Expenditure"]["Total Expenditure"] -=
         item["Expenditure"]["Additional cost"];
@@ -699,11 +699,11 @@ exports.UpdateUserIncomeStatementAdmin = async (req, res) => {
         data[index]["Expenditure"]["Additional cost"];
 
       item["Expenditure"]["Total Expenditure"] -=
-        item["Expenditure"]["Extra cost from opportunities"];
+        item["Expenditure"]["Costs from activities"];
       item["Expenditure"]["Total Expenditure"] +=
-        data[index]["Expenditure"]["Extra cost from opportunities"];
-      item["Expenditure"]["Extra cost from opportunities"] =
-        data[index]["Expenditure"]["Extra cost from opportunities"];
+        data[index]["Expenditure"]["Costs from activities"];
+      item["Expenditure"]["Costs from activities"] =
+        data[index]["Expenditure"]["Costs from activities"];
     });
 
     // let newData = incomeStatement.income;
