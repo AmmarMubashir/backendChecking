@@ -15,6 +15,7 @@ exports.createIncomeStatement = async (req, res) => {
   try {
     console.log(req.body);
     // console.log("HEllo");
+    // console.log("Check")
     const incomeStatement = await IncomeStatement.create(req.body);
 
     res.status(201).json({ incomeStatement });
