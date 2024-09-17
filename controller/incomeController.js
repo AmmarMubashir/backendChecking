@@ -128,6 +128,8 @@ exports.createIncomeStatementForUser = async (req, res) => {
           "Sundry costs": incomeData[index]["Expenditure"]["Sundry costs"],
           "Additional cost":
             incomeData[index]["Expenditure"]["Additional cost"],
+          Depreciation: incomeData[index]["Expenditure"]["Depreciation"],
+          Interest: incomeData[index]["Expenditure"]["Interest"],
         };
 
         for (let key1 in CostAndExpenses) {
@@ -153,50 +155,24 @@ exports.createIncomeStatementForUser = async (req, res) => {
           EBITIDA:
             data.Income["Total Income"] -
             data["Expenditure"]["Total Expenditure"],
-          Depreciation: incomeData[index]["Depreciation"],
+
           EBIT:
             data.Income["Total Income"] -
-            data["Expenditure"]["Total Expenditure"] +
-            incomeData[index]["Depreciation"],
-          Interest: incomeData[index]["Interest"],
-          "PRETAX INCOME":
+            data["Expenditure"]["Total Expenditure"],
+          "PRETAX PROFIT":
             data.Income["Total Income"] -
-            data["Expenditure"]["Total Expenditure"] +
-            incomeData[index]["Depreciation"] -
-            incomeData[index]["Interest"],
-          "Net Operating Loss":
-            data.Income["Total Income"] -
-              data["Expenditure"]["Total Expenditure"] +
-              incomeData[index]["Depreciation"] -
-              incomeData[index]["Interest"] <
-            0
-              ? data.Income["Total Income"] -
-                data["Expenditure"]["Total Expenditure"] +
-                incomeData[index]["Depreciation"] -
-                incomeData[index]["Interest"] +
-                0
-              : 0,
+            data["Expenditure"]["Total Expenditure"],
         };
 
         data = {
           ...data,
-          "Use Of Net Operating Loss":
-            data["Net Operating Loss"] < 0
-              ? 0
-              : Math.min(data["PRETAX INCOME"], data["Net Operating Loss"]),
-        };
-        data = {
-          ...data,
-          "Taxable Income":
-            data["PRETAX INCOME"] - data["Use Of Net Operating Loss"] < 0
-              ? 0
-              : data["PRETAX INCOME"] - data["Use Of Net Operating Loss"],
+          "Taxable Income": data["PRETAX PROFIT"],
           "Income Tax Expense": incomeData[index]["Income Tax Expense"],
         };
 
         data = {
           ...data,
-          "NET INCOME": data["PRETAX INCOME"] - data["Income Tax Expense"],
+          "NET INCOME": data["PRETAX PROFIT"] - data["Income Tax Expense"],
         };
 
         incomes.push(data);
@@ -321,6 +297,8 @@ exports.updateIncomeStatementForUser = async (req, res) => {
         "Professional fees": incomeData[1]["Expenditure"]["Professional fees"],
         "Sundry costs": incomeData[1]["Expenditure"]["Sundry costs"],
         "Additional cost": incomeData[1]["Expenditure"]["Additional cost"],
+        Depreciation: incomeData[1]["Expenditure"]["Depreciation"],
+        Interest: incomeData[1]["Expenditure"]["Interest"],
       };
 
       for (let key1 in CostAndExpenses) {
@@ -344,50 +322,24 @@ exports.updateIncomeStatementForUser = async (req, res) => {
         EBITIDA:
           data.Income["Total Income"] -
           data["Expenditure"]["Total Expenditure"],
-        Depreciation: incomeData[1]["Depreciation"],
+
         EBIT:
           data.Income["Total Income"] -
-          data["Expenditure"]["Total Expenditure"] +
-          incomeData[1]["Depreciation"],
-        Interest: incomeData[1]["Interest"],
-        "PRETAX INCOME":
+          data["Expenditure"]["Total Expenditure"],
+        "PRETAX PROFIT":
           data.Income["Total Income"] -
-          data["Expenditure"]["Total Expenditure"] +
-          incomeData[1]["Depreciation"] -
-          incomeData[1]["Interest"],
-        "Net Operating Loss":
-          data.Income["Total Income"] -
-            data["Expenditure"]["Total Expenditure"] +
-            incomeData[1]["Depreciation"] -
-            incomeData[1]["Interest"] <
-          0
-            ? data.Income["Total Income"] -
-              data["Expenditure"]["Total Expenditure"] +
-              incomeData[1]["Depreciation"] -
-              incomeData[1]["Interest"] +
-              0
-            : 0,
+          data["Expenditure"]["Total Expenditure"],
       };
 
       data = {
         ...data,
-        "Use Of Net Operating Loss":
-          data["Net Operating Loss"] < 0
-            ? 0
-            : Math.min(data["PRETAX INCOME"], data["Net Operating Loss"]),
-      };
-      data = {
-        ...data,
-        "Taxable Income":
-          data["PRETAX INCOME"] - data["Use Of Net Operating Loss"] < 0
-            ? 0
-            : data["PRETAX INCOME"] - data["Use Of Net Operating Loss"],
+        "Taxable Income": data["PRETAX PROFIT"],
         "Income Tax Expense": incomeData[1]["Income Tax Expense"],
       };
 
       data = {
         ...data,
-        "NET INCOME": data["PRETAX INCOME"] - data["Income Tax Expense"],
+        "NET INCOME": data["PRETAX PROFIT"] - data["Income Tax Expense"],
       };
 
       incomes = data;
@@ -512,6 +464,8 @@ exports.updateIncomeStatementForQuarter3 = async (req, res) => {
         "Professional fees": incomeData[2]["Expenditure"]["Professional fees"],
         "Sundry costs": incomeData[2]["Expenditure"]["Sundry costs"],
         "Additional cost": incomeData[2]["Expenditure"]["Additional cost"],
+        Depreciation: incomeData[2]["Expenditure"]["Depreciation"],
+        Interest: incomeData[2]["Expenditure"]["Interest"],
       };
 
       for (let key1 in CostAndExpenses) {
@@ -535,50 +489,24 @@ exports.updateIncomeStatementForQuarter3 = async (req, res) => {
         EBITIDA:
           data.Income["Total Income"] -
           data["Expenditure"]["Total Expenditure"],
-        Depreciation: incomeData[2]["Depreciation"],
+
         EBIT:
           data.Income["Total Income"] -
-          data["Expenditure"]["Total Expenditure"] +
-          incomeData[2]["Depreciation"],
-        Interest: incomeData[2]["Interest"],
-        "PRETAX INCOME":
+          data["Expenditure"]["Total Expenditure"],
+        "PRETAX PROFIT":
           data.Income["Total Income"] -
-          data["Expenditure"]["Total Expenditure"] +
-          incomeData[2]["Depreciation"] -
-          incomeData[2]["Interest"],
-        "Net Operating Loss":
-          data.Income["Total Income"] -
-            data["Expenditure"]["Total Expenditure"] +
-            incomeData[2]["Depreciation"] -
-            incomeData[2]["Interest"] <
-          0
-            ? data.Income["Total Income"] -
-              data["Expenditure"]["Total Expenditure"] +
-              incomeData[2]["Depreciation"] -
-              incomeData[2]["Interest"] +
-              0
-            : 0,
+          data["Expenditure"]["Total Expenditure"],
       };
 
       data = {
         ...data,
-        "Use Of Net Operating Loss":
-          data["Net Operating Loss"] < 0
-            ? 0
-            : Math.min(data["PRETAX INCOME"], data["Net Operating Loss"]),
-      };
-      data = {
-        ...data,
-        "Taxable Income":
-          data["PRETAX INCOME"] - data["Use Of Net Operating Loss"] < 0
-            ? 0
-            : data["PRETAX INCOME"] - data["Use Of Net Operating Loss"],
+        "Taxable Income": data["PRETAX PROFIT"],
         "Income Tax Expense": incomeData[2]["Income Tax Expense"],
       };
 
       data = {
         ...data,
-        "NET INCOME": data["PRETAX INCOME"] - data["Income Tax Expense"],
+        "NET INCOME": data["PRETAX PROFIT"] - data["Income Tax Expense"],
       };
 
       incomes = data;
@@ -702,6 +630,8 @@ exports.updateIncomeStatementForQuarter4 = async (req, res) => {
         "Professional fees": incomeData[3]["Expenditure"]["Professional fees"],
         "Sundry costs": incomeData[3]["Expenditure"]["Sundry costs"],
         "Additional cost": incomeData[3]["Expenditure"]["Additional cost"],
+        Depreciation: incomeData[3]["Expenditure"]["Depreciation"],
+        Interest: incomeData[3]["Expenditure"]["Interest"],
       };
 
       for (let key1 in CostAndExpenses) {
@@ -725,50 +655,24 @@ exports.updateIncomeStatementForQuarter4 = async (req, res) => {
         EBITIDA:
           data.Income["Total Income"] -
           data["Expenditure"]["Total Expenditure"],
-        Depreciation: incomeData[3]["Depreciation"],
+
         EBIT:
           data.Income["Total Income"] -
-          data["Expenditure"]["Total Expenditure"] +
-          incomeData[3]["Depreciation"],
-        Interest: incomeData[3]["Interest"],
-        "PRETAX INCOME":
+          data["Expenditure"]["Total Expenditure"],
+        "PRETAX PROFIT":
           data.Income["Total Income"] -
-          data["Expenditure"]["Total Expenditure"] +
-          incomeData[3]["Depreciation"] -
-          incomeData[3]["Interest"],
-        "Net Operating Loss":
-          data.Income["Total Income"] -
-            data["Expenditure"]["Total Expenditure"] +
-            incomeData[3]["Depreciation"] -
-            incomeData[3]["Interest"] <
-          0
-            ? data.Income["Total Income"] -
-              data["Expenditure"]["Total Expenditure"] +
-              incomeData[3]["Depreciation"] -
-              incomeData[3]["Interest"] +
-              0
-            : 0,
+          data["Expenditure"]["Total Expenditure"],
       };
 
       data = {
         ...data,
-        "Use Of Net Operating Loss":
-          data["Net Operating Loss"] < 0
-            ? 0
-            : Math.min(data["PRETAX INCOME"], data["Net Operating Loss"]),
-      };
-      data = {
-        ...data,
-        "Taxable Income":
-          data["PRETAX INCOME"] - data["Use Of Net Operating Loss"] < 0
-            ? 0
-            : data["PRETAX INCOME"] - data["Use Of Net Operating Loss"],
+        "Taxable Income": data["PRETAX PROFIT"],
         "Income Tax Expense": incomeData[3]["Income Tax Expense"],
       };
 
       data = {
         ...data,
-        "NET INCOME": data["PRETAX INCOME"] - data["Income Tax Expense"],
+        "NET INCOME": data["PRETAX PROFIT"] - data["Income Tax Expense"],
       };
 
       incomes = data;

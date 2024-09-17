@@ -615,8 +615,7 @@ exports.getAllIncomeStatements = async (req, res) => {
         0
       );
       let extraIncome = item.income.reduce(
-        (acc, current) =>
-          acc + current["Income"]["Income from activities"],
+        (acc, current) => acc + current["Income"]["Income from activities"],
         0
       );
       let expensesFromOpportunities = item.income.reduce(
@@ -629,8 +628,7 @@ exports.getAllIncomeStatements = async (req, res) => {
         0
       );
       let extraCost = item.income.reduce(
-        (acc, current) =>
-          acc + current["Expenditure"]["Costs from activities"],
+        (acc, current) => acc + current["Expenditure"]["Costs from activities"],
         0
       );
 
@@ -684,8 +682,7 @@ exports.UpdateUserIncomeStatementAdmin = async (req, res) => {
       item.Income["Additional income"] =
         data[index]["Income"]["Additional income"];
 
-      item.Income["Total Income"] -=
-        item["Income"]["Income from activities"];
+      item.Income["Total Income"] -= item["Income"]["Income from activities"];
       item.Income["Total Income"] +=
         data[index]["Income"]["Income from activities"];
       item.Income["Income from activities"] =
@@ -719,7 +716,7 @@ exports.UpdateUserIncomeStatementAdmin = async (req, res) => {
     //       item["Expenditure"]["Total Expenditure"] +
     //       newData[index]["Depreciation"],
     //     Interest: newData[index]["Interest"],
-    //     "PRETAX INCOME":
+    //     "PRETAX PROFIT":
     //       item.Income["Total Income"] -
     //       item["Expenditure"]["Total Expenditure"] +
     //       newData[index]["Depreciation"] -
@@ -738,49 +735,41 @@ exports.UpdateUserIncomeStatementAdmin = async (req, res) => {
     //         : 0,
     //   };
 
-    //   // console.log("ITEM", item["PRETAX INCOME"]);
+    //   // console.log("ITEM", item["PRETAX PROFIT"]);
 
     //   item = {
     //     ...item,
     //     "Use Of Net Operating Loss":
     //       item["Net Operating Loss"] < 0
     //         ? 0
-    //         : Math.min(item["PRETAX INCOME"], item["Net Operating Loss"]),
+    //         : Math.min(item["PRETAX PROFIT"], item["Net Operating Loss"]),
     //   };
     //   item = {
     //     ...item,
     //     "Taxable Income":
-    //       item["PRETAX INCOME"] - item["Use Of Net Operating Loss"] < 0
+    //       item["PRETAX PROFIT"] - item["Use Of Net Operating Loss"] < 0
     //         ? 0
-    //         : item["PRETAX INCOME"] - item["Use Of Net Operating Loss"],
+    //         : item["PRETAX PROFIT"] - item["Use Of Net Operating Loss"],
     //     "Income Tax Expense": newData[index]["Income Tax Expense"],
     //   };
 
     //   item = {
     //     ...item,
-    //     "NET INCOME": item["PRETAX INCOME"] - item["Income Tax Expense"],
+    //     "NET INCOME": item["PRETAX PROFIT"] - item["Income Tax Expense"],
     //   };
     // });
 
     incomeStatement.income.forEach((item, index) => {
       item.EBITIDA =
         item.Income["Total Income"] - item["Expenditure"]["Total Expenditure"];
-      item.Depreciation = data[index].Depreciation;
+      item.Depreciation = data[index]["Expenditure"].Depreciation;
       item.EBIT = item.EBITIDA + item.Depreciation;
-      item.Interest = data[index].Interest;
-      item["PRETAX INCOME"] = item.EBIT - item.Interest;
-      item["Net Operating Loss"] =
-        item["PRETAX INCOME"] < 0 ? item["PRETAX INCOME"] : 0;
-      item["Use Of Net Operating Loss"] =
-        item["Net Operating Loss"] < 0
-          ? 0
-          : Math.min(item["PRETAX INCOME"], item["Net Operating Loss"]);
-      item["Taxable Income"] =
-        item["PRETAX INCOME"] - item["Use Of Net Operating Loss"] < 0
-          ? 0
-          : item["PRETAX INCOME"] - item["Use Of Net Operating Loss"];
+      item.Interest = data[index]["Expenditure"].Interest;
+      item["PRETAX PROFIT"] = item.EBIT - item.Interest;
+
+      item["Taxable Income"] = item["PRETAX PROFIT"];
       item["Income Tax Expense"] = data[index]["Income Tax Expense"];
-      item["NET INCOME"] = item["PRETAX INCOME"] - item["Income Tax Expense"];
+      item["NET INCOME"] = item["PRETAX PROFIT"] - item["Income Tax Expense"];
     });
 
     await incomeStatement.save();

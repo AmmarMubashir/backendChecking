@@ -33,6 +33,7 @@ const UserIncomeStatementModel = mongoose.Schema({
           type: Number,
           default: 0,
         },
+
         "Total Income": {
           type: Number,
           required: [true, "Please provide total income"],
@@ -99,6 +100,14 @@ const UserIncomeStatementModel = mongoose.Schema({
           type: Number,
           required: [true, "Please provide additional costs"],
         },
+        Depreciation: {
+          type: Number,
+          require: [true, "Please provide depreciation"],
+        },
+        Interest: {
+          type: Number,
+          required: [true, "Please provide Interest"],
+        },
         "Total Expenditure": {
           type: Number,
           required: [true, "Please provide total expenditure"],
@@ -108,30 +117,16 @@ const UserIncomeStatementModel = mongoose.Schema({
         type: Number,
         required: [true, "Please provide EBITIDA"],
       },
-      Depreciation: {
-        type: Number,
-        require: [true, "Please provide depreciation"],
-      },
+
       EBIT: {
         type: Number,
         required: [true, "Please provide EBIT"],
       },
-      Interest: {
-        type: Number,
-        required: [true, "Please provide Interest"],
-      },
-      "PRETAX INCOME": {
+      "PRETAX PROFIT": {
         type: Number,
         required: [true, "Please provide pre-tax income"],
       },
-      "Net Operating Loss": {
-        type: Number,
-        required: [true, "Please provide net operating loss"],
-      },
-      "Use Of Net Operating Loss": {
-        type: Number,
-        required: [true, "Please provide use of net operating loss"],
-      },
+
       "Taxable Income": {
         type: Number,
         required: [true, "Please provide taxable income"],
